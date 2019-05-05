@@ -23,7 +23,7 @@ if(isset($_GET['language'])){
 <head>
     <link rel="icon" href="data:;base64,=">
     <meta charset="utf-8">
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
     <script src="./JS/script.js"></script>
     
     

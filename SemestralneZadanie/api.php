@@ -16,7 +16,7 @@ switch ($method) {
     case 'GET':{
         $request_type = $request[0];
         if($request_type == "text"){
-            mysqli_set_charset($con,"utf8");
+            //mysqli_set_charset($conn,"utf8");
             $sql = "SELECT l.text FROM language l WHERE l.page_name='" . $request[1] . "' AND l.language='" . $request[2] . "'";
             //echo $sql;
             $result = $conn->query($sql);
@@ -25,7 +25,7 @@ switch ($method) {
                 }
                 if($result->num_rows > 0){
                     while($row = $result->fetch_assoc()){
-                        $text = utf8_encode($row['text']);
+                        $text = $row['text'];
                         $data = array("text" => $text);
                         array_push($dataToJson, $data);
                     }
@@ -35,7 +35,7 @@ switch ($method) {
     }
     default:
 }
-echo json_encode($dataToJson,JSON_UNESCAPED_UNICODE);
+echo json_encode($dataToJson);
 $conn->close();
 
 ?>

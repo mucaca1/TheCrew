@@ -23,7 +23,7 @@ if(isset($_GET['language'])){
 <head>
     <link rel="icon" href="data:;base64,=">
     <meta charset="utf-8">
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
     <script src="./JS/script.js"></script>
     
     
@@ -67,7 +67,7 @@ if(isset($_POST['username']) && isset($_POST['pass'])){
             header("Location:index.php?invalid_pass=true");
         }
     }
-    else{
+
         $basedn='ou=People,dc=stuba,dc=sk';
         $ds = @ldap_connect('ldap://ldap.stuba.sk', 636);
         //nastavovanie ldap
@@ -101,7 +101,7 @@ if(isset($_POST['username']) && isset($_POST['pass'])){
         if ($ldapSearchResult)
         {
             for ($i=0; $i<$info["count"]; $i++) {
-                $username = $info[$i]["cn"][0];
+                $username = $info[$i]["uid"][0];
                 $number = $info[$i]["uisid"][0];
                 $type = $info[$i]["employeetype"][0];
                 $email = "";
@@ -132,7 +132,6 @@ if(isset($_POST['username']) && isset($_POST['pass'])){
                     }
                 }
             }
-        }
         @ldap_close($ds);
         
     }
