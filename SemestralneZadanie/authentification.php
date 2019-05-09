@@ -62,6 +62,9 @@ if(isset($_POST['username']) && isset($_POST['pass'])){
         if(password_verify($password,$hash)){
             echo "Password is valid! Welcome " . $type;
             $_SESSION['accountID'] = $row['id'];
+			if($type == "admin"){
+				header("Location:admin_page.php");
+			}
         }
         else{
             header("Location:index.php?invalid_pass=true");

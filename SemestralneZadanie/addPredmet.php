@@ -6,12 +6,7 @@ function updateDatabse() {
 	}
 	else
 	{
-	/*echo "Upload: " . $_FILES["csv_subor"]["name"] . "<br />";
-	echo "Type: " . $_FILES["csv_subor"]["type"] . "<br />";
-	echo "Size: " . ($_FILES["csv_subor"]["size"] / 1024) . " Kb<br />";
-	echo "Stored in: " . $_FILES["csv_subor"]["tmp_name"];*/
 	$csv_subor = file_get_contents($_FILES["csv_subor"]["tmp_name"], true);
-	//echo $csv_subor;
 	}
 	$skolsky_rok =$_POST['skolsky_rok'];
 	$nazov_predmetu =$_POST['nazov_predmetu'];
@@ -21,7 +16,7 @@ function updateDatabse() {
 	include('config.php');	
 	$query_insert = "INSERT INTO Predmety (skolsky_rok, nazov_predmetu, csv_subor, oddelovac_csv) values ('$skolsky_rok', '$nazov_predmetu', '$csv_subor', '$oddelovac_csv');";
 	$result = mysqli_query($conn, $query_insert);
-	header("Location: http://147.175.121.210:8159/SemestralneZadanie/index.php");
+	header("Location:admin_page.php");
 	die();
 }
 ?>
