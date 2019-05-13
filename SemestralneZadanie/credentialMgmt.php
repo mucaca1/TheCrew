@@ -20,7 +20,7 @@ if(isset($_FILES["uploadedFile"]))
         $action = $_POST['action'];
         $csvArray = readCSVFile($_FILES["uploadedFile"]["tmp_name"],$dlm);
         $_SESSION["csvData"] = $csvArray;
-        //var_dump($csvArray);
+        $_SESSION["dlm"] = $dlm;
         
         if($action == "gen") //chceme generovat hesla
         {            
