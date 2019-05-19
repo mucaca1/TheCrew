@@ -1,4 +1,4 @@
-<script type="text/javascript" src="JS/myscript.js"></script>
+
 <?php
 include_once "config.php";  //include database. Use $conn.
 

@@ -60,7 +60,27 @@ $result = $conn->query($sql);
     </style>
 </head>
 
+<?php
+//ak nie je prihlaseny
+    if(!isset($_SESSION['accountID'])){
+        //echo $_SESSION['accountID'];
+        header("Location:index.php");
+    }
+    else{
+        //ak je tak zober vsetky data co viem.
+        $sql = "SELECT u.username, u.email, u.number, u.type FROM users u WHERE u.id='" . $_SESSION['accountID'] . "'";
+        $userInfo = array();
+        $result = $conn->query($sql);
+        while( $row = $result->fetch_assoc() ) {
+            array_push($userInfo, $row['username']);
+            array_push($userInfo, $row['email']);
+            array_push($userInfo, $row['number']);
+            array_push($userInfo, $row['type']);
 
+            $type = $row['type'];
+        }
+    }
+?>
 <body>
 <?php
 include "menubar.php";
@@ -78,7 +98,7 @@ echo "<script> initText(document.getElementById('logoffButton'), 'logoff','".$la
         $earliest_year = 2000;
         $latest_year = date('Y');
 
-        echo '<select name="academicYear">';
+        echo "Školský rok: ". '<select name="academicYear">';
         foreach ( range( $latest_year, $earliest_year ) as $i ) {
 
             $previousYear = $i-1;
@@ -92,9 +112,10 @@ echo "<script> initText(document.getElementById('logoffButton'), 'logoff','".$la
         echo '</select>';
         ?>
         <br>
-        <input type="text" name="subjectName">
+        <p>Predmet: </p> <input type="text" name="subjectName">
         <input type="file" name="fileToUpload" id="fileToUpload">
         <br>
+        <p>Delimiter: </p>
         <select name="delimiter">
             <option value="," selected>,</option>
             <option value=";">;</option>
@@ -243,6 +264,7 @@ function readCSVFile($toRead,$dlm) {
     $earliest_year = 2000;
     $latest_year = date('Y');
 
+    echo 'Školský rok: ';
     echo '<select name="academicYear2">';
     echo '<option value="--">--</option>';
     foreach ( range( $latest_year, $earliest_year ) as $i ) {
@@ -250,7 +272,7 @@ function readCSVFile($toRead,$dlm) {
         $previousYear = $i-1;
 
         $academicYearLS = "LS-" . $i . "-" . "$previousYear";
-        $academicYearZS = "ZS-" . $i . "-" . "$previousYear";;
+        $academicYearZS = "ZS-" . $i . "-" . "$previousYear";
 
         echo '<option value="'.$academicYearLS.'">'.$academicYearLS.'</option>';
         echo '<option value="'.$academicYearZS.'">'.$academicYearZS.'</option>';
@@ -263,6 +285,7 @@ function readCSVFile($toRead,$dlm) {
     <input type='hidden' name='acaVal' value="<?php if($_POST['filter']) echo $_POST["academicYear2"]?>" id="academVal">
     <?php
         if($_POST['filter']) {
+            echo "Predmet: ";
             echo '<select name="subjectName2" id="subjectName2">';
 
             $sqlSelSub = "SELECT subject_name FROM Subject WHERE year='" . $_POST['academicYear2'] . "'";
