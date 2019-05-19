@@ -96,8 +96,8 @@ if(isset($_SESSION['csvData'])){
 					}
 					$i++;
 				}
-				$email_text = str_replace('{{sender_email}}',$smtp_from_email,$email_text);
-				$email_text = str_replace('{{sender_name}}',$smtp_from_name,$email_text);
+				$email_text = str_replace('{{sender_email}}',$_SESSION["smtp_from_email"],$email_text);
+				$email_text = str_replace('{{sender_name}}',$_SESSION["smtp_from_name"],$email_text);
 				//echo $email_text;
 				
 				
