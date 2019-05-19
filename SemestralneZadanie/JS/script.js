@@ -1,10 +1,18 @@
 var mainId;
 var interval;
-
+var lang;
 
 
 function setId(id){
     mainId = id;
+}
+
+function skLang(){
+    lang = "sk";
+}
+
+function enLang(){
+    lang = "en";
 }
 
 /**
@@ -15,7 +23,7 @@ function setId(id){
  * echo "<div id='tvojeID'><script>initText(document.getElementById('tvojeID'),'".$page_name[0].".username', '".$language."')</script></div>";
  */
 function initText(element,page, language){
-    /*console.log(element);
+    console.log(element);
     console.log(page);
     console.log(language);
     $.ajax({
@@ -38,15 +46,16 @@ function initText(element,page, language){
             element.innerHTML = el;
         });
     }
-});*/
+});
 }
 
 function uploadChangesButton(obj){
     var cl = obj.className.split(' ');
-    var status = obj.id;
+    var status = cl[1].split('_')[0];
+    var teamids = cl[1].split('_')[1];
     $.ajax({
         type: 'POST',
-        url: 'https://147.175.121.210:4159/SemestralneZadanie/upload.php/uploads/button/' + status + "/" + mainId + "/" + cl[1] ,
+        url: 'https://147.175.121.210:4159/SemestralneZadanie/upload.php/uploads/button/' + status + "/" + mainId + "/" + teamids ,
         success: function(msg){
             console.log(msg);
     }
@@ -56,9 +65,11 @@ function uploadChangesButton(obj){
 function uploadChangesValue(obj){
     var cl = obj.className.split(' ');
     var status = obj.value;
+    var st_id = obj.id.split("_");
+
     $.ajax({
         type: 'POST',
-        url: 'https://147.175.121.210:4159/SemestralneZadanie/upload.php/uploads/value/' + status + "/" + mainId + "/" + cl[3] ,
+        url: 'https://147.175.121.210:4159/SemestralneZadanie/upload.php/uploads/value/' + status + "/" + st_id[1] + "/" + cl[1].substring(cl[1].length-1) + "/" + mainId,
         success: function(msg){
             console.log(msg);
     }
@@ -66,12 +77,12 @@ function uploadChangesValue(obj){
 }
 
 
-function getChanges(team, updateOnly){
-    console.log(team);
+function getChanges(studentid, updateOnly){
+    console.log(studentid);
 
     $.ajax({
         type: 'GET',
-        url: 'https://147.175.121.210:4159/SemestralneZadanie/upload.php/getChanges/' + team + "",
+        url: 'https://147.175.121.210:4159/SemestralneZadanie/upload.php/getChanges/' + studentid + "",
         success: function(msg){
         console.log(msg);
         var obj = JSON.parse(msg);
@@ -86,10 +97,10 @@ function getChanges(team, updateOnly){
             console.log(element['points']);
             console.log(element);
             if(updateOnly){
-                updateTables(element['team_id'], element['subject_name'],element['year'], element['points'], element, i);
+                updateTables(element['team_id'], element['subject_name'],element['year'], element['points'], element, element['admin_accept']);
             }
             else{
-                createDynamicTable(element['team_id'], element['subject_name'],element['year'], element['points'], element, i);
+                createDynamicTable(element['team_id'], element['subject_name'],element['year'], element['points'], element, element['admin_accept']);
             }
             i++;
             
@@ -121,7 +132,8 @@ function checkSum(obj){
     {
         sum += parseInt(points[index].value,10);
     }
-    if(sum <= parseInt(document.getElementById(cl[2]).textContent,10)){
+    var max = parseInt(document.getElementById("full_points_" + cl[1].split('_')[1]).textContent,10);
+    if(sum <= max){
         console.log("ok");
         obj.style.border = "thick solid #00FF00";
         uploadChangesValue(obj);
@@ -132,7 +144,7 @@ function checkSum(obj){
     }
 }
 
-function createDynamicTable(team, subject_name, year, points, row, ink){
+function createDynamicTable(team_id, subject_name, year, points, row, ink){
     
     var h = document.createElement('h3');
     h.innerHTML = subject_name;
@@ -141,13 +153,41 @@ function createDynamicTable(team, subject_name, year, points, row, ink){
     y.innerHTML = year;
     document.getElementById('content').appendChild(y);
     var p = document.createElement('p');
-    p.setAttribute("id", subject_name+team);
+    p.setAttribute("id", "full_points_"+team_id);
     p.innerHTML = points;
     document.getElementById('content').appendChild(p);
+    if(ink != null){
+        var p2 = document.createElement('p');
+        if(ink == true){
+            if(lang.localeCompare("sk")){
+                p2.innerHTML = "Admin suhlasi";
+            }
+            else{
+                p2.innerHTML = "Admin accept";
+            }
+            
+        }
+        else{
+            if(lang.localeCompare("sk")){
+                p2.innerHTML = "Admin nesúhlasí";
+            }
+            else{
+                p2.innerHTML = "Admin decline";
+            }
+        }
+        document.getElementById('content').appendChild(p2);
+    }
+    
     var table = document.createElement('table');
     table.setAttribute("id", "predmet_table");
     var head = document.createElement('thead');
-    head.innerHTML = "<tr><th>Meno</th><th>Email</th><th>Body</th><th>Odsúhlasenie bodov</th></tr>";
+    if(lang.localeCompare("sk")){
+        head.innerHTML = "<tr><th>Meno</th><th>Email</th><th>Body</th><th>Odsúhlasenie bodov</th></tr>";
+    }
+    else{
+        head.innerHTML = "<tr><th>Name</th><th>Email</th><th>Points</th><th>Accept points</th></tr>";
+    }
+    
     table.appendChild(head);
     var body = document.createElement('tbody');
 
@@ -159,54 +199,78 @@ function createDynamicTable(team, subject_name, year, points, row, ink){
     {
         let t = document.createElement('tr');
 
-        //button
-        var text2 = "<small></small>";
-        if(row[i]["enable"] == true){
-            if(row[i]["point"] != null){
-                text = "<input type='number' name='' id='" + row[i]["username"] + ink + "i" + "' class = 'enable_for_all member_points_t" + team + ink + " "+subject_name+team+" "+ team + "' value = " + row[i]["point"] + " onchange = 'checkSum(this);'>";
-            }
-            else{
-                text = "<input type='number' name='' id='" + row[i]["username"] + ink + "i" + "' class = 'enable_for_all member_points_t" + team + ink + " "+subject_name+team+" "+ team + "' onchange = 'checkSum(this);'>";
-            }
-            text2 = "-";
-            if(row[i]["agree"] != null){
-                if(row[i]["agree"] == false){
-                    text2 = "<small >Nesúhlasí</small>";
+        var text = "<input type='number' name='points' onchange = 'checkSum(this);'";
+        if(row[i]['point'] != null){
+            //ak ma body
+            text = text + " value='" + row[i]['point'] + "'";
+        }
+
+        //nastavenie lass parametrov
+        text = text + " id = 'input_" + row[i]['id'] + "_" + team_id + "'"; // input_username_team pre refresh id
+        text = text + " class = '" + "input_" + team_id; //zakladny pre id inputu. input_teamID pre checksum.
+
+        if(row[i]['enable'] != null){
+            if(ink != null){
+                if(inf == false){
+                    if(row[i]['enable'] == true){
+                        text = text + " enable_for_all";
                     }
                     else{
-                        text2 = "<small >Súhlasí<small>";
+                        text = text + " disable_for_you";
                     }
-            }
-            
-        }
-        else{
-            if(row[i]["point"] != null){
-                text = "<input type='number' name='points' id='" + row[i]["username"] + ink + "i" + "' class = 'disable_for_you member_points_t" + ink + team + " "+subject_name+team+" "+ team + "' value = " + row[i]["point"] + " onchange = 'checkSum(this);'>";
-            }
-            else{
-                text = "<input type='number' name='points' id='" + row[i]["username"] + ink + "i" + "' class = 'disable_for_you member_points_t" + ink + team + " "+subject_name+team+" "+ team + "' onchange = 'checkSum(this);'>";
-            }
-
-            
-            
-            if(row[i]["button"] != null){
-                if(row[i]["button"] == true){
-                text2 = "<button id='positive' class = 'enable_for_all "+ team +"' onclick = 'uploadChangesButton(this);'>Suhlas</button> / <button id='negative' class = 'enable_for_all "+ team +"' onclick = 'uploadChangesButton(this);'>Nesuhlas</button>";
                 }
                 else{
-                    text2 = "<button id='positive' class = 'disable_for_you "+ team +"'>Suhlas</button> / <button id='negative' class = 'disable_for_you "+ team +"'>Nesuhlas</button>";
+                    text = text + " disable_for_you";
                 }
             }
-            if(row[i]["agree"] != null){
-                if(row[i]["agree"] == false){
-                    text2 = "<small >Nesúhlasí</small>";
-                    }
-                    else{
-                        text2 = "<small >Súhlasí<small>";
-                    }
+            
+        }
+        text = text + "'>"; //uzavretie class nastaveni a uzavretie input.
+
+        var text2 = "<small>-</small>";
+
+        if(row[i]['button'] != null){
+            if(row[i]['button'] == true){
+                //je to moj button a mozem nan klikat.
+                if(lang.localeCompare("sk")){
+                    text2 = "<button id = 'button_"+ row[i]['username'] + "_" + team_id +"' class = 'enable_for_all positive_"+team_id+"' onclick='uploadChangesButton(this)'>Súhlasím</button>/<button id = 'button_"+ row[i]['username'] + "_" + team_id +"' class = 'enable_for_all negative_"+team_id+"' onclick='uploadChangesButton(this)'>Nesúhlasím</button>";
+                }
+                else{
+                    text2 = "<button id = 'button_"+ row[i]['username'] + "_" + team_id +"' class = 'enable_for_all positive_"+team_id+"' onclick='uploadChangesButton(this)'>Accept</button>/<button id = 'button_"+ row[i]['username'] + "_" + team_id +"' class = 'enable_for_all negative_"+team_id+"' onclick='uploadChangesButton(this)'>Decline</button>";
+                }
+            }
+            else{
+                //nie je to moj button a mozem sa nan len pozerat.
+                if(lang.localeCompare("sk")){
+                    text2 = "<button id = 'button_"+ row[i]['username'] + "_" + team_id +"' class = 'disable_for_you positive_"+team_id+"' onclick='uploadChangesButton(this)'>Súhlasím</button>/<button id = 'button_"+ row[i]['username'] + "_" + team_id +"' class = 'disable_for_you negative_"+team_id+"' onclick='uploadChangesButton(this)'>Nesúhlasím</button>";
+                }
+                else{
+                    text2 = "<button id = 'button_"+ row[i]['username'] + "_" + team_id +"' class = 'disable_for_you positive_"+team_id+"' onclick='uploadChangesButton(this)'>Accept</button>/<button id = 'button_"+ row[i]['username'] + "_" + team_id +"' class = 'disable_for_you negative_"+team_id+"' onclick='uploadChangesButton(this)'>Decline</button>";
+                }
             }
         }
-        t.innerHTML = "<td>" + row[i]["username"] + "</td><td>" + row[i]["email"] + "</td><td>" + text +"</td><td id = '"+row[i]["username"]+ ink + "'>" + text2 + "</td>";
+        if(row[i]['agree'] != null){
+            if(row[i]['agree'] == true){
+                if(lang.localeCompare("sk")){
+                    text2 = "<small>Suhlasim</small>";
+                }
+                else{
+                    text2 = "<small>Accepted</small>";
+                }
+                
+            }
+            else{
+                if(lang.localeCompare("sk")){
+                    text2 = "<small>Nesuhlasim</small>";
+                }
+                else{
+                    text2 = "<small>Declined</small>";
+                }
+                
+            }
+        }
+        
+        t.innerHTML = "<td>" + row[i]["username"] + "</td><td>" + row[i]["email"] + "</td><td>" + text +"</td><td id = '"+row[i]["username"]+ team_id + "'>" + text2 + "</td>";
         body.appendChild(t);
         //document.write("<tr><td>" + (i+1) + "</td><td>" + row[i][0] + "</td><td>" + row[i][1] +"</td></tr>");
         i++;
@@ -220,78 +284,85 @@ function createDynamicTable(team, subject_name, year, points, row, ink){
     disableButton();
 }
 
-function updateTables(team, subject_name, year, points, row, ink){
+function updateTables(team_id, subject_name, year, points, row, ink){
     var i = 0;
-    document.getElementById(subject_name+team).innerHTML = points;
+    document.getElementById("full_points_"+team_id).innerHTML = points;
     while(row[i] != null)
     {
-        if(row[i]["enable"] == true){
-            if(row[i]["point"] != null){
-                var input = document.getElementById(row[i]["username"] + ink + "i");
-                if(input != null){
-                    input.setAttribute("class", "enable_for_all member_points_t" + team + ink + " "+subject_name+team+" "+ team);
-                    if(row[i]["point"] != null){
-                        input.setAttribute("value", row[i]["point"]);
-                    }
+        //nahraj input.
+        var input = document.getElementById("input_" + row[i]['id'] + "_" + team_id); //konkretny input konkretneho cloveka.
+        if(row[i]['point'] != null){
+            //ak ma body nastav.
+            input.setAttribute('value', row[i]['point']);
+        }
+
+        //mozem editovat ?
+        if(row[i]['enable'] != null){
+            if(row[i]['enable'] == true){
+                //mozem
+                input.setAttribute('class', 'enable_for_all input_' + team_id);
+            }
+            else{
+                //nemozem
+                input.setAttribute('class', 'disable_for_you input_' + team_id);
+            }
+        }
+
+        //Tlacidlo alebo text;
+        //chcem kolonku kde ma byt tlacidlo alebo text.
+        var updatedTd = document.getElementById(row[i]["username"] + team_id);
+        updatedTd.innerHTML = "";
+
+        //nanovo nahram info z vytvarania tabulky
+        /* ####################################################################### */
+        var text2 = "<small>-</small>";
+
+        if(row[i]['button'] != null){
+            if(row[i]['button'] == true){
+                //je to moj button a mozem nan klikat.
+                if(lang.localeCompare("sk")){
+                    text2 = "<button id = 'button_"+ row[i]['username'] + "_" + team_id +"' class = 'enable_for_all positive_"+team_id+"' onclick='uploadChangesButton(this)'>Súhlasím</button>/<button id = 'button_"+ row[i]['username'] + "_" + team_id +"' class = 'enable_for_all negative_"+team_id+"' onclick='uploadChangesButton(this)'>Nesúhlasím</button>";
+
+                }
+                else{
+                    text2 = "<button id = 'button_"+ row[i]['username'] + "_" + team_id +"' class = 'enable_for_all positive_"+team_id+"' onclick='uploadChangesButton(this)'>Accept</button>/<button id = 'button_"+ row[i]['username'] + "_" + team_id +"' class = 'enable_for_all negative_"+team_id+"' onclick='uploadChangesButton(this)'>Decline</button>";
+
                 }
             }
             else{
-                var input = document.getElementById(row[i]["username"] + ink + "i");
-                if(input != null){
-                    input.setAttribute("class", "enable_for_all member_points_t" + team + ink + " "+subject_name+team+" "+ team);
-                }
-            }
-            var td = document.getElementById(row[i]["username"] + ink);
-            td.innerHTML = "";
-            var text2 = "-";
-            if(row[i]["button"] != null){
-                if(row[i]["button"] == true){
-                    text2 = "<button id='positive' class = 'enable_for_all "+ team +"' onclick = 'uploadChangesButton(this);'>Suhlas</button> / <button id='negative' class = 'enable_for_all "+ team +"' onclick = 'uploadChangesButton(this);'>Nesuhlas</button>";
+                //nie je to moj button a mozem sa nan len pozerat.
+                if(lang.localeCompare("sk")){
+                    text2 = "<button id = 'button_"+ row[i]['username'] + "_" + team_id +"' class = 'disable_for_you positive_"+team_id+"' onclick='uploadChangesButton(this)'>Súhlasím</button>/<button id = 'button_"+ row[i]['username'] + "_" + team_id +"' class = 'disable_for_you negative_"+team_id+"' onclick='uploadChangesButton(this)'>Nesúhlasím</button>";
                 }
                 else{
-                    text2 = "<button id='positive' class = 'disable_for_you "+ team +"'>Suhlas</button> / <button id='negative' class = 'disable_for_you "+ team +"'>Nesuhlas</button>";
+                    text2 = "<button id = 'button_"+ row[i]['username'] + "_" + team_id +"' class = 'disable_for_you positive_"+team_id+"' onclick='uploadChangesButton(this)'>Accept</button>/<button id = 'button_"+ row[i]['username'] + "_" + team_id +"' class = 'disable_for_you negative_"+team_id+"' onclick='uploadChangesButton(this)'>Decline</button>";
+      
                 }
             }
-            if(row[i]["agree"] != null){
-                if(row[i]["agree"] == false){
-                    text2 = "<small >Nesúhlasí</small>";
-                    }
-                    else{
-                        text2 = "<small >Súhlasí<small>";
-                    }
-            }
-            td.innerHTML = text2;
         }
-        else{
-            var input = document.getElementById(row[i]["username"] + ink + "i");
-            if(input != null){
-                input.setAttribute("class", "disable_for_you member_points_t" + team + ink + " "+subject_name+team+" "+ team);
-                if(row[i]["point"] != null){
-                    input.setAttribute("value", row[i]["point"]);
+        if(row[i]['agree'] != null){
+            if(row[i]['agree'] == true){
+                if(lang.localeCompare("sk")){
+                    text2 = "<small>Suhlasim</small>";
                 }
+                else{
+                    text2 = "<small>Accepted</small>";
+                }
+                
             }
-            var td = document.getElementById(row[i]["username"] + ink);
-            td.innerHTML = "";
+            else{
+                if(lang.localeCompare("sk")){
+                    text2 = "<small>Nesuhlasim</small>";
+                }
+                else{
+                    text2 = "<small>Declined</small>";
+                }
+                
+            }
+        }
+        /* ####################################################################### */
 
-            var text2 = "-";
-            if(row[i]["button"] != null){
-                if(row[i]["button"] == true){
-                    text2 = "<button id='positive' class = 'enable_for_all "+ team +"' onclick = 'uploadChangesButton(this);'>Suhlas</button> / <button id='negative' class = 'enable_for_all "+ team +"' onclick = 'uploadChangesButton(this);'>Nesuhlas</button>";
-                }
-                else{
-                    text2 = "<button id='positive' class = 'disable_for_you "+ team +"'>Suhlas</button> / <button id='negative' class = 'disable_for_you "+ team +"'>Nesuhlas</button>";
-                }
-            }
-            if(row[i]["agree"] != null){
-                if(row[i]["agree"] == false){
-                    text2 = "<small >Nesúhlasí</small>";
-                    }
-                    else{
-                        text2 = "<small >Súhlasí<small>";
-                    }
-            }
-            td.innerHTML = text2;
-        }
+        updatedTd.innerHTML = text2;
         i++;
     }
     enableButton();

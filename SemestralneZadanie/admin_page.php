@@ -75,14 +75,14 @@ if(isset($_GET['language'])){
     </article>
 	
 	<form action="addPredmet.php" method="post" enctype="multipart/form-data">
-	<h3><div id='pridaniePredmetuText'><script>initText(document.getElementById('pridaniePredmetuText'),'".$page_name[0].".pridaniePredmetu', '".$language."')</script></h3><!-- Pridanie Predmetu -->
-	<div id='skolskyRokText'><script>initText(document.getElementById('skolskyRokText'),'".$page_name[0].".skolskyRok', '".$language."')</script><br><!-- Skolsky rok: -->
+	<h3><div id='pridaniePredmetuText'>Pridanie predmetu</h3><!-- Pridanie Predmetu -->
+	<div id='skolskyRokText'>Školský rok<br><!-- Skolsky rok: -->
 	<input type="text" name="skolsky_rok" id="skolsky_rok"><br>
-	<div id='nazovPredmetuText'><script>initText(document.getElementById('nazovPredmetuText'),'".$page_name[0].".nazovPredmetu', '".$language."')</script><br><!-- Nazov predmetu: --><br>
+	<div id='nazovPredmetuText'>Názov predmetu<br><!-- Nazov predmetu: --><br>
 	<input type="text" name="nazov_predmetu" id="nazov_predmetu"><br>
-	<div id='CSVSuborText'><script>initText(document.getElementById('CSVSuborText'),'".$page_name[0].".CSVSubor', '".$language."')</script><br><!-- CSV subor: --><br><br>
+	<div id='CSVSuborText'>CSV Súbor<br><!-- CSV subor: --><br><br>
 	<input type="file" name="csv_subor" id="csv_subor"><br>
-	<div id='oddelovacText'><script>initText(document.getElementById('oddelovacText'),'".$page_name[0].".oddelovac', '".$language."')</script><br><!-- Oddelovac csv suboru: --><br><br><br>
+	<div id='oddelovacText'>Oddelovač csv<br><!-- Oddelovac csv suboru: --><br><br><br>
 	<input type="text" name="oddelovac_csv" id="oddelovac_csv"><br>
 	
 	<input type="submit" value="Submit" name="submit"><br>
@@ -183,7 +183,7 @@ if(isset($_GET['language'])){
 	</script>
 
     <footer>
-        <p>&copy; The Crew 2019</p>
+    <p>&copy; The Crew 2019 - Lendáč, Krč, Szalay, Czerwinski, Tran Minh</p>
     </footer>
 </body>
 </html>

@@ -1,0 +1,21 @@
+{
+  "config": {
+    "default": "en"
+  },
+  "language": {
+    "en": {
+      "#logoffButton": "Log out",
+      "#welcomePage_teams": "Show team info",
+      "#welcomePage_points": "Points from subjects",
+      "#welcomePage_mailEditor": "Mail editor",
+      "#welcomePage_mailManager": "Mail manager"
+    },
+    "sk": {
+      "#logoffButton": "Odhlásiť",
+      "#welcomePage_teams": "Informácie o tímoch",
+      "#welcomePage_points": "Body predmetov",
+      "#welcomePage_mailEditor": "Editor mailov",
+      "#welcomePage_mailManager": "Manažér mailov"
+    }
+  }
+}

@@ -73,18 +73,14 @@ if(isset($_GET['language'])){
         <div class="content">
         </div>
     </article>
-	<form action="send_id.php" method="post" enctype="multipart/form-data">
+<!--	<form action="send_id.php" method="post" enctype="multipart/form-data">
 	<div id='studentIDText'><script>initText(document.getElementById('studentIDText'),'".$page_name[0].".studentId', '".$language."')</script><br><!-- ID studenta: -->
-	<input type="text" name="student_id" id="student_id"><br>
+<!--	<input type="text" name="student_id" id="student_id"><br>
 	<input type="submit" value="Submit" name="submit"><br>
 	
-	</form>
+	</form>-->
     <?php
-	if(isset($_GET['student_id'])){
-	$id_studenta = $_GET['student_id'];
-	} else {
-		$id_studenta = "";
-	}
+	$id_studenta = $userInfo[2];
 	echo $id_studenta;
 	$query = "SELECT * FROM Predmety WHERE csv_subor LIKE '%" . $id_studenta . "%';"; 
 	$result = mysqli_query($conn, $query);
@@ -132,7 +128,7 @@ if(isset($_GET['language'])){
 	?>
 
     <footer>
-        <p>&copy; The Crew 2019</p>
+	<p>&copy; The Crew 2019 - Lendáč, Krč, Szalay, Czerwinski, Tran Minh</p>
     </footer>
 </body>
 </html>

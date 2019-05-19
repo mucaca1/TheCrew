@@ -1,0 +1,19 @@
+{
+  "config": {
+    "default": "en"
+  },
+  "language": {
+    "en": {
+      "#index_username": "Username",
+      "#index_password": "Password",
+      "#index_submit": "Login",
+      "#index_paswordStatus": "Invalid password"
+    },
+    "sk": {
+        "#index_username": "Meno používateľa",
+        "#index_password": "Heslo",
+        "#index_submit": "Prihlásiť",
+        "#index_paswordStatus": "Zlé heslo !"
+    }
+  }
+}
