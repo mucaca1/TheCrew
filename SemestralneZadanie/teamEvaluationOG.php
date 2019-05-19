@@ -105,7 +105,7 @@ echo "<script> initText(document.getElementById('logoffButton'), 'logoff','".$la
     </form>
 </article>
 <?php
-$target_dir = "/home/xkrc/public_html/SemestralneZadanie/CSV";
+$target_dir = "/home/xkrc/public_html/SemestralneZadanie/CSV/";
 $target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
 $uploadOk = 1;
 
