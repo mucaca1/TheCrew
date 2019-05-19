@@ -254,6 +254,13 @@ switch ($method) {
                 $return_set["sql1"] = $sql;
                 $result = $conn->query($sql);
             }
+            else if($request[1] == "admin"){   //https://147.175.121.210:4159/SemestralneZadanie/upload.php/admin/{body}/Teams.teams_id
+                $value = $request[2];
+                $team_id = $request[3];
+                $sql = "UPDATE Team t SET t.points = " . $value . " WHERE t.teams_id = " . $team_id;
+                $return_set["sql"] = $sql;
+                $result = $conn->query($sql);
+            }
         }
         break;
     }

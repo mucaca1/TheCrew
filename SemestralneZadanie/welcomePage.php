@@ -89,7 +89,6 @@ if(isset($_GET['language'])){
     </article>
     
 
-
     <footer>
     <p>&copy; The Crew 2019 - Lendáč, Krč, Szalay, Czerwinski, Tran Minh</p>
     </footer>

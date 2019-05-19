@@ -21,7 +21,6 @@ if(isset($_GET['language'])){
         $page_name = explode(".", basename($_SERVER['PHP_SELF']));
         include_once "config.php";  //include database. Use $conn.
         
-        
         $sql = "SELECT l.text FROM language l WHERE l.page_name='" . $page_name[0] . ".title' AND l.language='" . $language . "'";
         $result = $conn->query($sql);
     ?>
