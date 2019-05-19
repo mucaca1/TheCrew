@@ -77,7 +77,7 @@ if(isset($_GET['language'])){
     <h1>The Crew</h1>
     <article>
         <div class="content">
-            <a href="https://147.175.121.210:4159/SemestralneZadanie/<?php if($type == 'student'){ echo 'student_page_points.php'; }else{ echo ''; } ?>"><button id='welcomePage_teams'>Prezeranie timv</button></a>
+            <a href="https://147.175.121.210:4159/SemestralneZadanie/<?php if($type == 'student'){ echo 'student_page_points.php'; }else{ echo 'teamEvaluationOG.php'; } ?>"><button id='welcomePage_teams'>Prezeranie timv</button></a>
             <a href="https://147.175.121.210:4159/SemestralneZadanie/<?php if($type == 'student'){ echo 'student_page.php'; }else{ echo 'admin_page.php'; } ?>"><button id='welcomePage_points'>Body</button></a>
             <?php
                 if($type != 'student'){

@@ -70,7 +70,6 @@ echo "<script> initText(document.getElementById('logoffButton'), 'logoff','".$la
 <h1>The Crew</h1>
 <article>
     <div class="content">
-        blabal
     </div>
 
     <form action="teamEvaluationOG.php" method="post" enctype="multipart/form-data">
@@ -106,7 +105,7 @@ echo "<script> initText(document.getElementById('logoffButton'), 'logoff','".$la
     </form>
 </article>
 <?php
-$target_dir = "/home/xkrc/public_html/SemestralneZadanie/";
+$target_dir = "/home/xkrc/public_html/SemestralneZadanie/CSV";
 $target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
 $uploadOk = 1;
 
@@ -162,8 +161,6 @@ if ($uploadOk == 0) {
             else{
                 $teamNumber = $tmp[$i][3];
             }
-
-            echo sizeof($tmp[$i]);
 
                 $sqlUserCheck = "SELECT * FROM users WHERE number='$aisNumber'";
                 $resultUserCheck = $conn->query($sqlUserCheck);
@@ -228,7 +225,6 @@ if ($uploadOk == 0) {
                     $resultTS = $conn->query($sqlTS);
                 }
         }
-        echo "OK";
 
     } else {
 //        echo "Sorry, there was an error uploading your file.";
