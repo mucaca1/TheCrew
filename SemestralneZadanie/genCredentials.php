@@ -27,7 +27,7 @@ if(isset($_SESSION['csvData'])){
     foreach($csvArray as &$line)
     {
         if($i == 0)
-            array_push($line,"password");
+            array_push($line,"heslo");
         else
         {
             $pass = generate_string($chars,15);
