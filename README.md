@@ -14,4 +14,4 @@ API => http://147.175.121.210:4159/SemestralneZadanie/api.php/text/page/language
 Install:
 To install https://github.com/PHPMailer/PHPMailer (required) do "composer require phpmailer/phpmailer"
 https://datatables.net/ included in JS and CSS
-add 777 permissions on /uploads
+add folder with 777 permissions /uploads
