@@ -14,6 +14,29 @@ use PHPMailer\PHPMailer\Exception;
 require 'vendor/autoload.php';
 
 
+//ak nie je prihlaseny
+    if(!isset($_SESSION['accountID'])){
+        //echo $_SESSION['accountID'];
+        header("Location:index.php");
+    }
+    else{
+        //ak je tak zober vsetky data co viem.
+        $sql = "SELECT u.username, u.email, u.number, u.type FROM users u WHERE u.id='" . $_SESSION['accountID'] . "'";
+        $userInfo = array();
+        $result = $conn->query($sql);
+        while( $row = $result->fetch_assoc() ) {
+            array_push($userInfo, $row['username']);
+            array_push($userInfo, $row['email']);
+            array_push($userInfo, $row['number']);
+            array_push($userInfo, $row['type']);
+
+			$type = $row['type'];
+			if($type != "admin"){
+				header("Location:index.php");
+			}
+        }
+    }
+
 
 $language = "sk";
 if(isset($_SESSION['language'])){

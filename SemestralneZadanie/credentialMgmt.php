@@ -211,7 +211,7 @@ if(isset($_FILES["uploadedFile"]))
     
 
     <footer>
-        <p>&copy; The Crew 2019</p>
+	<p>&copy; The Crew 2019 - Lendáč, Krč, Szalay, Czerwinski, Tran Minh</p>
     </footer>
 </body>
 </html>

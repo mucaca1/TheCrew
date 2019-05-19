@@ -98,7 +98,7 @@ if(isset($_POST['editordata']) && isset($_POST['id_template'])){
     
 
     <footer>
-        <p>&copy; The Crew 2019</p>
+	<p>&copy; The Crew 2019 - Lendáč, Krč, Szalay, Czerwinski, Tran Minh</p>
     </footer>
 <script>
 

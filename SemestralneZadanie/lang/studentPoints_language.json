@@ -1,0 +1,25 @@
+{
+  "config": {
+    "default": "en"
+  },
+  "language": {
+    "en": {
+      "#logoffButton": "Log out",
+      "#points_email": "Email",
+      "#points_name": "Name",
+      "#points_points": "Points",
+      "#points_submit": "Submit",
+      "#points_accept" : "Accept",
+      "#points_noaccept" : "Decline"
+    },
+    "sk": {
+      "#logoffButton": "Odhlásiť",
+      "#points_email": "Email",
+      "#points_name": "Meno",
+      "#points_points": "Body",
+      "#points_submit": "Potvrdenie",
+      "#points_accept" : "Súhlasím",
+      "#points_noaccept" : "Nesúhlasím"
+    }
+  }
+}

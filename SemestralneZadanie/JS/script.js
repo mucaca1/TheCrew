@@ -1,10 +1,18 @@
 var mainId;
 var interval;
-
+var lang;
 
 
 function setId(id){
     mainId = id;
+}
+
+function skLang(){
+    lang = "sk";
+}
+
+function enLang(){
+    lang = "en";
 }
 
 /**
@@ -15,7 +23,7 @@ function setId(id){
  * echo "<div id='tvojeID'><script>initText(document.getElementById('tvojeID'),'".$page_name[0].".username', '".$language."')</script></div>";
  */
 function initText(element,page, language){
-    /*console.log(element);
+    console.log(element);
     console.log(page);
     console.log(language);
     $.ajax({
@@ -38,7 +46,7 @@ function initText(element,page, language){
             element.innerHTML = el;
         });
     }
-});*/
+});
 }
 
 function uploadChangesButton(obj){
@@ -151,10 +159,21 @@ function createDynamicTable(team_id, subject_name, year, points, row, ink){
     if(ink != null){
         var p2 = document.createElement('p');
         if(ink == true){
-            p2.innerHTML = "Admin suhlasi";
+            if(lang.localeCompare("sk")){
+                p2.innerHTML = "Admin suhlasi";
+            }
+            else{
+                p2.innerHTML = "Admin accept";
+            }
+            
         }
         else{
-            p2.innerHTML = "Admin NESUHLASI";
+            if(lang.localeCompare("sk")){
+                p2.innerHTML = "Admin nesúhlasí";
+            }
+            else{
+                p2.innerHTML = "Admin decline";
+            }
         }
         document.getElementById('content').appendChild(p2);
     }
@@ -162,7 +181,13 @@ function createDynamicTable(team_id, subject_name, year, points, row, ink){
     var table = document.createElement('table');
     table.setAttribute("id", "predmet_table");
     var head = document.createElement('thead');
-    head.innerHTML = "<tr><th>Meno</th><th>Email</th><th>Body</th><th>Odsúhlasenie bodov</th></tr>";
+    if(lang.localeCompare("sk")){
+        head.innerHTML = "<tr><th>Meno</th><th>Email</th><th>Body</th><th>Odsúhlasenie bodov</th></tr>";
+    }
+    else{
+        head.innerHTML = "<tr><th>Name</th><th>Email</th><th>Points</th><th>Accept points</th></tr>";
+    }
+    
     table.appendChild(head);
     var body = document.createElement('tbody');
 
@@ -185,12 +210,20 @@ function createDynamicTable(team_id, subject_name, year, points, row, ink){
         text = text + " class = '" + "input_" + team_id; //zakladny pre id inputu. input_teamID pre checksum.
 
         if(row[i]['enable'] != null){
-            if(row[i]['enable'] == true){
-                text = text + " enable_for_all";
+            if(ink != null){
+                if(inf == false){
+                    if(row[i]['enable'] == true){
+                        text = text + " enable_for_all";
+                    }
+                    else{
+                        text = text + " disable_for_you";
+                    }
+                }
+                else{
+                    text = text + " disable_for_you";
+                }
             }
-            else{
-                text = text + " disable_for_you";
-            }
+            
         }
         text = text + "'>"; //uzavretie class nastaveni a uzavretie input.
 
@@ -199,19 +232,41 @@ function createDynamicTable(team_id, subject_name, year, points, row, ink){
         if(row[i]['button'] != null){
             if(row[i]['button'] == true){
                 //je to moj button a mozem nan klikat.
-                text2 = "<button id = 'button_"+ row[i]['username'] + "_" + team_id +"' class = 'enable_for_all positive_"+team_id+"' onclick='uploadChangesButton(this)'>Ok</button>/<button id = 'button_"+ row[i]['username'] + "_" + team_id +"' class = 'enable_for_all negative_"+team_id+"' onclick='uploadChangesButton(this)'>NIE</button>";
+                if(lang.localeCompare("sk")){
+                    text2 = "<button id = 'button_"+ row[i]['username'] + "_" + team_id +"' class = 'enable_for_all positive_"+team_id+"' onclick='uploadChangesButton(this)'>Súhlasím</button>/<button id = 'button_"+ row[i]['username'] + "_" + team_id +"' class = 'enable_for_all negative_"+team_id+"' onclick='uploadChangesButton(this)'>Nesúhlasím</button>";
+                }
+                else{
+                    text2 = "<button id = 'button_"+ row[i]['username'] + "_" + team_id +"' class = 'enable_for_all positive_"+team_id+"' onclick='uploadChangesButton(this)'>Accept</button>/<button id = 'button_"+ row[i]['username'] + "_" + team_id +"' class = 'enable_for_all negative_"+team_id+"' onclick='uploadChangesButton(this)'>Decline</button>";
+                }
             }
             else{
                 //nie je to moj button a mozem sa nan len pozerat.
-                text2 = "<button id = 'button_"+ row[i]['username'] + "_" + team_id +"' class = 'disable_for_you positive_"+team_id+"' onclick='uploadChangesButton(this)'>Ok</button>/<button id = 'button_"+ row[i]['username'] + "_" + team_id +"' class = 'disable_for_you negative_"+team_id+"' onclick='uploadChangesButton(this)'>NIE</button>";
+                if(lang.localeCompare("sk")){
+                    text2 = "<button id = 'button_"+ row[i]['username'] + "_" + team_id +"' class = 'disable_for_you positive_"+team_id+"' onclick='uploadChangesButton(this)'>Súhlasím</button>/<button id = 'button_"+ row[i]['username'] + "_" + team_id +"' class = 'disable_for_you negative_"+team_id+"' onclick='uploadChangesButton(this)'>Nesúhlasím</button>";
+                }
+                else{
+                    text2 = "<button id = 'button_"+ row[i]['username'] + "_" + team_id +"' class = 'disable_for_you positive_"+team_id+"' onclick='uploadChangesButton(this)'>Accept</button>/<button id = 'button_"+ row[i]['username'] + "_" + team_id +"' class = 'disable_for_you negative_"+team_id+"' onclick='uploadChangesButton(this)'>Decline</button>";
+                }
             }
         }
         if(row[i]['agree'] != null){
             if(row[i]['agree'] == true){
-                text2 = "<small>Suhlasim</small>";
+                if(lang.localeCompare("sk")){
+                    text2 = "<small>Suhlasim</small>";
+                }
+                else{
+                    text2 = "<small>Accepted</small>";
+                }
+                
             }
             else{
-                text2 = "<small>Nesuhlasim</small>";
+                if(lang.localeCompare("sk")){
+                    text2 = "<small>Nesuhlasim</small>";
+                }
+                else{
+                    text2 = "<small>Declined</small>";
+                }
+                
             }
         }
         
@@ -265,19 +320,44 @@ function updateTables(team_id, subject_name, year, points, row, ink){
         if(row[i]['button'] != null){
             if(row[i]['button'] == true){
                 //je to moj button a mozem nan klikat.
-                text2 = "<button id = 'button_"+ row[i]['username'] + "_" + team_id +"' class = 'enable_for_all positive_"+team_id+"' onclick='uploadChangesButton(this)'>Ok</button>/<button id = 'button_"+ row[i]['username'] + "_" + team_id +"' class = 'enable_for_all negative_"+team_id+"' onclick='uploadChangesButton(this)'>NIE</button>";
+                if(lang.localeCompare("sk")){
+                    text2 = "<button id = 'button_"+ row[i]['username'] + "_" + team_id +"' class = 'enable_for_all positive_"+team_id+"' onclick='uploadChangesButton(this)'>Súhlasím</button>/<button id = 'button_"+ row[i]['username'] + "_" + team_id +"' class = 'enable_for_all negative_"+team_id+"' onclick='uploadChangesButton(this)'>Nesúhlasím</button>";
+
+                }
+                else{
+                    text2 = "<button id = 'button_"+ row[i]['username'] + "_" + team_id +"' class = 'enable_for_all positive_"+team_id+"' onclick='uploadChangesButton(this)'>Accept</button>/<button id = 'button_"+ row[i]['username'] + "_" + team_id +"' class = 'enable_for_all negative_"+team_id+"' onclick='uploadChangesButton(this)'>Decline</button>";
+
+                }
             }
             else{
                 //nie je to moj button a mozem sa nan len pozerat.
-                text2 = "<button id = 'button_"+ row[i]['username'] + "_" + team_id +"' class = 'disable_for_you positive_"+team_id+"' onclick='uploadChangesButton(this)'>Ok</button>/<button id = 'button_"+ row[i]['username'] + "_" + team_id +"' class = 'disable_for_you negative_"+team_id+"' onclick='uploadChangesButton(this)'>NIE</button>";
+                if(lang.localeCompare("sk")){
+                    text2 = "<button id = 'button_"+ row[i]['username'] + "_" + team_id +"' class = 'disable_for_you positive_"+team_id+"' onclick='uploadChangesButton(this)'>Súhlasím</button>/<button id = 'button_"+ row[i]['username'] + "_" + team_id +"' class = 'disable_for_you negative_"+team_id+"' onclick='uploadChangesButton(this)'>Nesúhlasím</button>";
+                }
+                else{
+                    text2 = "<button id = 'button_"+ row[i]['username'] + "_" + team_id +"' class = 'disable_for_you positive_"+team_id+"' onclick='uploadChangesButton(this)'>Accept</button>/<button id = 'button_"+ row[i]['username'] + "_" + team_id +"' class = 'disable_for_you negative_"+team_id+"' onclick='uploadChangesButton(this)'>Decline</button>";
+      
+                }
             }
         }
         if(row[i]['agree'] != null){
             if(row[i]['agree'] == true){
-                text2 = "<small>Suhlasim</small>";
+                if(lang.localeCompare("sk")){
+                    text2 = "<small>Suhlasim</small>";
+                }
+                else{
+                    text2 = "<small>Accepted</small>";
+                }
+                
             }
             else{
-                text2 = "<small>Nesuhlasim</small>";
+                if(lang.localeCompare("sk")){
+                    text2 = "<small>Nesuhlasim</small>";
+                }
+                else{
+                    text2 = "<small>Declined</small>";
+                }
+                
             }
         }
         /* ####################################################################### */

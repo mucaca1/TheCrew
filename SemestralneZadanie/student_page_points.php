@@ -32,13 +32,19 @@ if(isset($_GET['language'])){
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
     <script src="./JS/script.js"></script>
     
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"
+        integrity="sha384-tsQFqpEReu7ZLhBV2VZlAu7zcOV+rXbYlF2cqB8txI/8aZajjp4Bqd+V6D5IgvKT"
+        crossorigin="anonymous">
+</script>
+<script src="./lang/jquery.MultiLanguage.min.js"></script>
     
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     
-    <title><?php while($row = $result->fetch_assoc()){ echo $row['text']; } ?></title>
+    <title>TeamPoints</title>
         
     <!--Zakladne CSS-->
     <link href="./CSS/style.css" media="all" rel="stylesheet" type="text/css"/>
+
     <!--CSS pre tlac-->
     <link rel="stylesheet" href="./CSS/print-style.css" type="text/css" media="print,projection">
 </head>
@@ -52,8 +58,28 @@ if(isset($_GET['language'])){
         $ais_id = $row['number'];
     }
 ?>
+<?php
+//ak nie je prihlaseny
+    if(!isset($_SESSION['accountID'])){
+        //echo $_SESSION['accountID'];
+        header("Location:index.php");
+    }
+    else{
+        //ak je tak zober vsetky data co viem.
+        $sql = "SELECT u.username, u.email, u.number, u.type FROM users u WHERE u.id='" . $_SESSION['accountID'] . "'";
+        $userInfo = array();
+        $result = $conn->query($sql);
+        while( $row = $result->fetch_assoc() ) {
+            array_push($userInfo, $row['username']);
+            array_push($userInfo, $row['email']);
+            array_push($userInfo, $row['number']);
+            array_push($userInfo, $row['type']);
 
-<body onload = 'enableButton(); disableButton(); getChanges(<?php echo $_SESSION["accountID"] ?>, false); setId(<?php echo $_SESSION["accountID"] ?>); automatUpdate();'>
+            $type = $row['type'];
+        }
+    }
+?>
+<body onload = 'enableButton(); disableButton(); getChanges(<?php echo $_SESSION["accountID"] ?>, false); setId(<?php echo $_SESSION["accountID"] ?>); enLang();'>
     <?php
 	include "menubar.php";
 	echo "<script> document.getElementById('login_user_name').innerHTML='". $userInfo[0] ."' </script>";
@@ -204,7 +230,7 @@ if(isset($_GET['language'])){
     </script>
 
     <footer>
-        <p>&copy; The Crew 2019</p>
+        <p>&copy; The Crew 2019 - Lendáč, Krč, Szalay, Czerwinski, Tran Minh</p>
     </footer>
 </body>
 </html>

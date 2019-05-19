@@ -26,13 +26,21 @@ if(isset($_GET['language'])){
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
     <script src="./JS/script.js"></script>
     
-    
+
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <script src="./lang/welcomePage_language.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"
+        integrity="sha384-tsQFqpEReu7ZLhBV2VZlAu7zcOV+rXbYlF2cqB8txI/8aZajjp4Bqd+V6D5IgvKT"
+        crossorigin="anonymous">
+</script>
+<script src="./lang/jquery.MultiLanguage.min.js"></script>
     
-    <title><?php while($row = $result->fetch_assoc()){ echo $row['text']; } ?></title>
+    <title>WelcomePage</title>
         
     <!--Zakladne CSS-->
     <link href="./CSS/style.css" media="all" rel="stylesheet" type="text/css"/>
+    <link href="./CSS/buttn.css" media="all" rel="stylesheet" type="text/css"/>
     <!--CSS pre tlac-->
     <link rel="stylesheet" href="./CSS/print-style.css" type="text/css" media="print,projection">
 </head>
@@ -69,16 +77,21 @@ if(isset($_GET['language'])){
     <h1>The Crew</h1>
     <article>
         <div class="content">
-            <a href="https://147.175.121.210:4159/SemestralneZadanie/<?php if($type == 'student'){ echo 'student_page_points.php'; }else{ echo ''; } ?>"><button>Prezeranie timv</button></a>
-            <a href="https://147.175.121.210:4159/SemestralneZadanie/<?php if($type == 'student'){ echo 'student_page.php'; }else{ echo 'admin_page.php'; } ?>"><button>Body</button></a>
-            <a href="https://147.175.121.210:4159/SemestralneZadanie/<?php if($type == 'student'){ echo ''; }else{ echo ''; } ?>"><button>-</button></a>
+            <a href="https://147.175.121.210:4159/SemestralneZadanie/<?php if($type == 'student'){ echo 'student_page_points.php'; }else{ echo ''; } ?>"><button id='welcomePage_teams'>Prezeranie timv</button></a>
+            <a href="https://147.175.121.210:4159/SemestralneZadanie/<?php if($type == 'student'){ echo 'student_page.php'; }else{ echo 'admin_page.php'; } ?>"><button id='welcomePage_points'>Body</button></a>
+            <?php
+                if($type != 'student'){
+                    echo "<a href='https://147.175.121.210:4159/SemestralneZadanie/templateEditor.php'><button id='welcomePage_mailEditor'>Mail Editor</button></a>";
+                    echo "<a href='https://147.175.121.210:4159/SemestralneZadanie/credentialMgmt.php'><button id='welcomePage_mailManager'>Mail Manager</button></a>";
+                }
+            ?>
         </div>
     </article>
     
 
 
     <footer>
-        <p>&copy; The Crew 2019</p>
+    <p>&copy; The Crew 2019 - Lendáč, Krč, Szalay, Czerwinski, Tran Minh</p>
     </footer>
 </body>
 </html>
