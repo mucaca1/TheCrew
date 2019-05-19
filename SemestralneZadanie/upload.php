@@ -134,7 +134,7 @@ switch ($method) {
                 $return_set["sql1"] = $sql;
                 $result = $conn->query($sql);
 
-                $sql = "UPDATE Teams t SET t.team_lider_id = " . $student_id . " WHERE t.teams_id = " . $team_id;
+                $sql = "UPDATE Teams t SET t.team_lider_id = " . $student_id . " WHERE t.teams_id = " . $$request[5];
                 $return_set["sql2"] = $sql;
                 $result = $conn->query($sql);
             }
