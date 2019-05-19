@@ -25,3 +25,26 @@ ul {
   .active {
     background-color: #4CAF50;
   }
+
+  #predmet_table {
+    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+  }
+  
+  #predmet_table td, #predmet_table th {
+    border: 1px solid #ddd;
+    padding: 8px;
+  }
+  
+  #predmet_table tr:nth-child(even){background-color: #f2f2f2;}
+  
+  #predmet_table tr:hover {background-color: #ddd;}
+  
+  #predmet_table th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #4CAF50;
+    color: white;
+  }

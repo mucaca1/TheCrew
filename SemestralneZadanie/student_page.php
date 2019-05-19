@@ -12,6 +12,7 @@ if(isset($_GET['language'])){
     $_SESSION['language'] = $_GET['language'];
     $language = $_GET['language'];
 }
+
 ?>
 <?php
         $page_name = explode(".", basename($_SERVER['PHP_SELF']));
@@ -39,6 +40,27 @@ if(isset($_GET['language'])){
     <link rel="stylesheet" href="./CSS/print-style.css" type="text/css" media="print,projection">
 </head>
 
+<?php
+//ak nie je prihlaseny
+    if(!isset($_SESSION['accountID'])){
+        //echo $_SESSION['accountID'];
+        header("Location:index.php");
+    }
+    else{
+        //ak je tak zober vsetky data co viem.
+        $sql = "SELECT u.username, u.email, u.number, u.type FROM users u WHERE u.id='" . $_SESSION['accountID'] . "'";
+        $userInfo = array();
+        $result = $conn->query($sql);
+        while( $row = $result->fetch_assoc() ) {
+            array_push($userInfo, $row['username']);
+            array_push($userInfo, $row['email']);
+            array_push($userInfo, $row['number']);
+            array_push($userInfo, $row['type']);
+
+            $type = $row['type'];
+        }
+    }
+?>
 
 <body>
     <?php
@@ -64,7 +86,7 @@ if(isset($_GET['language'])){
 		$id_studenta = "";
 	}
 	echo $id_studenta;
-	$query = "SELECT * FROM predmety WHERE csv_subor LIKE '%" . $id_studenta . "%';"; 
+	$query = "SELECT * FROM Predmety WHERE csv_subor LIKE '%" . $id_studenta . "%';"; 
 	$result = mysqli_query($conn, $query);
 	while (list($pk, $skolsky_rok, $nazov_predmetu, $csv_subor, $oddelovac_csv) = $result->fetch_row()) {
 		echo $skolsky_rok . "<br>" . $nazov_predmetu . "<br>";
