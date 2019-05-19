@@ -1,5 +1,7 @@
+<script type="text/javascript" src="JS/myscript.js"></script>
 <?php
 include_once "config.php";  //include database. Use $conn.
+
 
 $method = $_SERVER['REQUEST_METHOD'];
 $request = explode('/', trim($_SERVER['PATH_INFO'],'/'));
@@ -207,6 +209,60 @@ switch ($method) {
                 }
                 $table_number++;
             } 
+        }
+        else if($request_type == "showTable"){
+
+            $academicYear = $request[1];
+            $subjectName = $request[2];
+
+            $sqlSubjectID = "SELECT subject_id FROM Subject WHERE year='".$academicYear."' AND subject_name='".$subjectName."' LIMIT 1";
+            $resultSubjectID = $conn->query($sqlSubjectID);
+
+            echo $subjectName . " " . $academicYear;
+            echo "<br>";
+            echo "<br>";
+
+            if($resultSubjectID->num_rows > 0) {
+
+                $rowSubjectID = $resultSubjectID->fetch_assoc();
+
+                $sqlAllTeamIDs = "SELECT teams_id FROM Teams";
+                $resultAllTeamIDs = $conn->query($sqlAllTeamIDs);
+
+                if ($resultAllTeamIDs->num_rows > 0) {
+
+                    while ($rowAllTeamIDs = $resultAllTeamIDs->fetch_assoc()) {
+
+                        $sqlTable = "SELECT users.email, users.full_name, Team_Student.point, Team_Student.agree
+                        FROM users
+                        LEFT JOIN Team_Student ON Team_Student.student_id = users.id
+                        LEFT JOIN Teams ON Teams.teams_id = Team_Student.team_id WHERE Team_Student.team_id = '".$rowAllTeamIDs["teams_id"]."' AND Teams.subject_id='".$rowSubjectID["subject_id"]."'";
+                        $resultTable = $conn->query($sqlTable);
+
+                        if($resultTable->num_rows > 0) {
+
+                            echo "Team" . " " . $rowAllTeamIDs["teams_id"];
+//                            echo '<input type ="hidden" id="teamID" value ='.$rowAllTeamIDs["teams_id"].'>';
+                            echo "<br>";
+                            echo "Body:" . "<input type='number' id='points_".$rowAllTeamIDs["teams_id"]."'>";
+                            echo "<input type='button' id='changePoints_".$rowAllTeamIDs["teams_id"]."' name='changePoints' value='Change' onclick='setPoints(this)'>";
+                            echo "<table id='tableTable'>";
+                            echo "<tr><th>".Email."</th>";
+                            echo "<th>".Meno."</th>";
+                            echo "<th>".Body."</th>";
+                            echo "<th>".Suhlas."</th></tr>";
+
+                            if ($resultTable->num_rows > 0) {
+                                while ($rowTable = $resultTable->fetch_assoc()) {
+                                    echo "<tr><td>" . $rowTable["email"] . "</td><td>" . $rowTable["full_name"] . "</td><td>" . $rowTable["point"] . "</td><td>" . $rowTable["agree"] . "</td></tr>";
+                                }
+                            }
+                            echo "</table>";
+                            echo "<br>";
+                        }
+                    }
+                }
+            }
         }
         break;
     }
