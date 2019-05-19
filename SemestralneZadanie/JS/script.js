@@ -89,10 +89,10 @@ function getChanges(studentid, updateOnly){
             console.log(element['points']);
             console.log(element);
             if(updateOnly){
-                updateTables(element['team_id'], element['subject_name'],element['year'], element['points'], element);
+                updateTables(element['team_id'], element['subject_name'],element['year'], element['points'], element, element['admin_accept']);
             }
             else{
-                createDynamicTable(element['team_id'], element['subject_name'],element['year'], element['points'], element);
+                createDynamicTable(element['team_id'], element['subject_name'],element['year'], element['points'], element, element['admin_accept']);
             }
             i++;
             
@@ -148,6 +148,17 @@ function createDynamicTable(team_id, subject_name, year, points, row, ink){
     p.setAttribute("id", "full_points_"+team_id);
     p.innerHTML = points;
     document.getElementById('content').appendChild(p);
+    if(ink != null){
+        var p2 = document.createElement('p');
+        if(ink == true){
+            p2.innerHTML = "Admin suhlasi";
+        }
+        else{
+            p2.innerHTML = "Admin NESUHLASI";
+        }
+        document.getElementById('content').appendChild(p2);
+    }
+    
     var table = document.createElement('table');
     table.setAttribute("id", "predmet_table");
     var head = document.createElement('thead');
