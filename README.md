@@ -12,6 +12,7 @@ $page_name[0] je nazov suboru. Čiže ak je v databaze odkaz ahoj.somCarovny tak
 API => http://147.175.121.210:4159/SemestralneZadanie/api.php/text/page/language => return JSON textove retazce (reťazec)
 
 Install:
+
 To install https://github.com/PHPMailer/PHPMailer (required) do "composer require phpmailer/phpmailer"
 
 https://datatables.net/ included in JS and CSS
