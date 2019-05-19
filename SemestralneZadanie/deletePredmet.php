@@ -52,7 +52,7 @@ if(isset($_GET['language'])){
     <?php
 	if(isset($_GET['id'])){
 		include('config.php');	
-		$query = "DELETE FROM predmety where id_predmet='" . $_GET['id'] . "';";
+		$query = "DELETE FROM Predmety where id_predmet='" . $_GET['id'] . "';";
 		mysqli_query($conn, $query);
 		header("Location:admin_page.php");
 		die();

@@ -53,6 +53,8 @@ if(isset($_GET['language'])){
             array_push($userInfo, $row['email']);
             array_push($userInfo, $row['number']);
             array_push($userInfo, $row['type']);
+
+            $type = $row['type'];
         }
     }
 ?>
@@ -67,9 +69,13 @@ if(isset($_GET['language'])){
     <h1>The Crew</h1>
     <article>
         <div class="content">
+            <a href="https://147.175.121.210:4159/SemestralneZadanie/<?php if($type == 'student'){ echo 'student_page_points.php'; }else{ echo ''; } ?>"><button>Prezeranie timv</button></a>
+            <a href="https://147.175.121.210:4159/SemestralneZadanie/<?php if($type == 'student'){ echo 'student_page.php'; }else{ echo 'admin_page.php'; } ?>"><button>Body</button></a>
+            <a href="https://147.175.121.210:4159/SemestralneZadanie/<?php if($type == 'student'){ echo ''; }else{ echo ''; } ?>"><button>-</button></a>
         </div>
     </article>
     
+
 
     <footer>
         <p>&copy; The Crew 2019</p>
