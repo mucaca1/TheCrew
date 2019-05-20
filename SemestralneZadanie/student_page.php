@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <?php
 error_reporting(E_ALL);
-ini_set('display_errors', 1);
+//ini_set('display_errors', 1);
 session_start();
+include_once 'easyPHPmultilang/easyPHPmultilang.php';
 $language = "sk";
 if(isset($_SESSION['language'])){
     $language = $_SESSION['language'];
@@ -68,7 +69,7 @@ if(isset($_GET['language'])){
     <?php
 	include "menubar.php";
 	echo "<script> document.getElementById('login_user_name').innerHTML='Home (". $userInfo[0] .")' </script>";
-    echo "<script> initText(document.getElementById('logoffButton'), 'logoff','".$language."') </script>";
+    //echo "<script> initText(document.getElementById('logoffButton'), 'logoff','".$language."') </script>";
 	?>
     <article id="work" class="wrapper style1" style="padding: 5em 0 5em 0">
 	    <h1>The Crew</h1>

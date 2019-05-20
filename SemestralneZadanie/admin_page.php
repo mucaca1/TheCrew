@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <?php
 session_start();
+include_once 'easyPHPmultilang/easyPHPmultilang.php';
 $language = "sk";
 if(isset($_SESSION['language'])){
     $language = $_SESSION['language'];
@@ -13,12 +14,12 @@ if(isset($_GET['language'])){
 
 ?>
 <?php
-        $page_name = explode(".", basename($_SERVER['PHP_SELF']));
+        //$page_name = explode(".", basename($_SERVER['PHP_SELF']));
         include_once "config.php";  //include database. Use $conn.
         
         
-        $sql = "SELECT l.text FROM language l WHERE l.page_name='" . $page_name[0] . ".title' AND l.language='" . $language . "'";
-        $result = $conn->query($sql);
+        //$sql = "SELECT l.text FROM language l WHERE l.page_name='" . $page_name[0] . ".title' AND l.language='" . $language . "'";
+        //$result = $conn->query($sql);
 ?>
 <?php
 //ak nie je prihlaseny
@@ -89,21 +90,21 @@ if(isset($_GET['language'])){
     <?php
 	include "menubar.php";
 	echo "<script> document.getElementById('login_user_name').innerHTML='Home (". $userInfo[0] .")' </script>";
-    echo "<script> initText(document.getElementById('logoffButton'), 'logoff','".$language."') </script>";
+    //echo "<script> initText(document.getElementById('logoffButton'), 'logoff','".$language."') </script>";
 	?>
     <article id="work" class="wrapper style1" style="padding: 5em 0 5em 0">
 	    <h1>The Crew</h1>
     </article>
 	<article id="work" class="wrapper style2">
 	<form action="addPredmet.php" method="post" enctype="multipart/form-data">
-	<h3><div id='pridaniePredmetuText'>Pridanie predmetu</h3><!-- Pridanie Predmetu -->
-	<div id='skolskyRokText'>Školský rok<br><!-- Skolsky rok: -->
+	<h3><div id='pridaniePredmetuText'><?php $lang->printLabel(['Pridanie predmetu', 'Adding a course']);?></h3><!-- Pridanie Predmetu -->
+	<div id='skolskyRokText'><?php $lang->printLabel(['Školský rok', 'Accademic year']);?><br><!-- Skolsky rok: -->
 	<input type="text" name="skolsky_rok" id="skolsky_rok"><br>
-	<div id='nazovPredmetuText'>Názov predmetu<br><!-- Nazov predmetu: --><br>
+	<div id='nazovPredmetuText'><?php $lang->printLabel(['Názov predmetu', 'Course name']);?><br><!-- Nazov predmetu: --><br>
 	<input type="text" name="nazov_predmetu" id="nazov_predmetu"><br>
-	<div id='CSVSuborText'>CSV Súbor<br><!-- CSV subor: --><br><br>
+	<div id='CSVSuborText'><?php $lang->printLabel(['CSV Súbor:', 'CSV file:']);?><br><!-- CSV subor: --><br><br>
 	<input type="file" name="csv_subor" id="csv_subor"><br><br><br>
-	<div id='oddelovacText'>Oddelovač csv<br><!-- Oddelovac csv suboru: --><br>
+	<div id='oddelovacText'><?php $lang->printLabel(['Oddelovač csv', 'Delimiter in CSV file:']);?><br><!-- Oddelovac csv suboru: --><br>
 	<input type="text" name="oddelovac_csv" id="oddelovac_csv"><br>
 	
 	<input type="submit" value="Submit" name="submit"><br>

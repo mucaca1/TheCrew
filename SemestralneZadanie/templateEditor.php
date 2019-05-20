@@ -2,15 +2,7 @@
 <?php
 include_once "config.php";  //include database. Use $conn.
 session_start();
-$language = "sk";
-if(isset($_SESSION['language'])){
-    $language = $_SESSION['language'];
-}
-
-if(isset($_GET['language'])){
-    $_SESSION['language'] = $_GET['language'];
-    $language = $_GET['language'];
-}
+include_once 'easyPHPmultilang/easyPHPmultilang.php';
 ?>
 <?php
 //ak nie je prihlaseny
@@ -47,14 +39,14 @@ if(isset($_POST['editordata']) && isset($_POST['id_template'])){
 
 ?>
 <?php
-        $page_name = explode(".", basename($_SERVER['PHP_SELF']));
+        //$page_name = explode(".", basename($_SERVER['PHP_SELF']));
         //include_once "config.php";  //include database. Use $conn.
         
         
-        $sql = "SELECT l.text FROM language l WHERE l.page_name='" . $page_name[0] . ".title' AND l.language='" . $language . "'";
-        $result = $conn->query($sql);
+        //$sql = "SELECT l.text FROM language l WHERE l.page_name='" . $page_name[0] . ".title' AND l.language='" . $language . "'";
+        //$result = $conn->query($sql);
     ?>
-<html lang="<?php echo $language ?>">
+<html lang="<?php echo $lang->current_language ?>">
 <head>
     <link rel="icon" href="data:;base64,=">
     <meta charset="utf-8">
@@ -105,7 +97,7 @@ if(isset($_POST['editordata']) && isset($_POST['id_template'])){
         <div class="container">
 		
 			
-			<button onClick="fillText()">Load template</button><br>
+			<button onClick="fillText()"><?php $lang->printLabel(['Načítať šablónu', 'Load template']);?></button><br>
 			<form method="post">
 			<select id="first-choice" name="id_template">
 				
@@ -119,7 +111,7 @@ if(isset($_POST['editordata']) && isset($_POST['id_template'])){
 			
 			</select> 
 			  <textarea action="templateEditor.php" id="summernote" name="editordata"></textarea>
-			  <input type="submit" id="submitBtn" value="SaveTemplate">
+			  <input type="submit" id="submitBtn" value="<?php $lang->printLabel(['Uložiť šablónu', 'Save Template']);?>">
 			</form>
 		</div>
 		<?php include "footer.php"?>

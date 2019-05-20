@@ -2,25 +2,16 @@
 <?php
 session_start();
 include_once("csvReader.php");
-
-$language = "sk";
-if(isset($_SESSION['language'])){
-    $language = $_SESSION['language'];
-}
-
-if(isset($_GET['language'])){
-    $_SESSION['language'] = $_GET['language'];
-    $language = $_GET['language'];
-}
+include_once 'easyPHPmultilang/easyPHPmultilang.php';
 ?>
 
 <?php
-        $page_name = explode(".", basename($_SERVER['PHP_SELF']));
+        //$page_name = explode(".", basename($_SERVER['PHP_SELF']));
         include_once "config.php";  //include database. Use $conn.
         
         
-        $sql = "SELECT l.text FROM language l WHERE l.page_name='" . $page_name[0] . ".title' AND l.language='" . $language . "'";
-        $result = $conn->query($sql);
+        //$sql = "SELECT l.text FROM language l WHERE l.page_name='" . $page_name[0] . ".title' AND l.language='" . $language . "'";
+       // $result = $conn->query($sql);
 ?>
 
 <?php
@@ -118,7 +109,7 @@ if(isset($_FILES["uploadedFile"]))
 }
 
 ?>
-<html lang="<?php echo $language ?>">
+<html lang="<?php echo $lang->current_language ?>">
 <head>
     <link rel="icon" href="data:;base64,=">
     <meta charset="utf-8">
@@ -155,7 +146,7 @@ if(isset($_FILES["uploadedFile"]))
     <?php
 	include "menubar.php";
 	echo "<script> document.getElementById('login_user_name').innerHTML='Home (". $userInfo[0] .")' </script>";
-    echo "<script> initText(document.getElementById('logoffButton'), 'logoff','".$language."') </script>";
+    //echo "<script> initText(document.getElementById('logoffButton'), 'logoff','".$language."') </script>";
 	?>
     <article id="work" class="wrapper style1" style="padding: 5em 0 5em 0">
 	    <h1>The Crew</h1>
@@ -163,14 +154,14 @@ if(isset($_FILES["uploadedFile"]))
     <article id="work" class="wrapper style2">
         <div class="container">
             <form action="credentialMgmt.php" method="post" enctype="multipart/form-data">
-                <label>File:<br> <input type="file" name="uploadedFile" accept=".csv"></label><br>
+                <label><?php $lang->printLabel(['Odhlásiť sa', 'File']);?><br> <input type="file" name="uploadedFile" accept=".csv"></label><br>
                 
 
-                <label>Action:<br>
-                <input type="radio" name="action" value="gen"> Generate credentials<br>
-				<input type="radio" name="action" value="email"> Email credentials<br></label><br>
+                <label><?php $lang->printLabel(['Výber akcie:', 'Action:']);?><br>
+                <input type="radio" name="action" value="gen"><?php $lang->printLabel(['Vygenerovať heslá', 'Generate credentials']);?><br>
+				<input type="radio" name="action" value="email"><?php $lang->printLabel(['Odoslať prihlasovacie údaje E-mailom', 'Email credentials']);?> <br></label><br>
 				
-				<label>Delimiter:<br>
+				<label><?php $lang->printLabel(['Oddeľovač v CSV súbore:', 'Delimiter in CSV file:']);?><br>
                 <select name="delimiter">
                     <option selected value=",">,</option>
                     <option value=";">;</option>
@@ -179,8 +170,8 @@ if(isset($_FILES["uploadedFile"]))
 			<span class="emailForm">
                 
 				
-				<label>Email:<br>
-				<label>Template ID: 
+				<label><?php $lang->printLabel(['E-mail:', 'E-mail:']);?><br>
+				<label><?php $lang->printLabel(['ID šablóny:', 'Template ID:']);?> 
 				<select name="template_id">
 				<?php 
 				$sql2 = "SELECT ID FROM mail_template";
@@ -190,17 +181,17 @@ if(isset($_FILES["uploadedFile"]))
 				}
 				?>
 				</select></label><br>
-				SMTP STUBA Username:<input type="text" name="smtp_username"><br>
-				SMTP STUBA Password:<input type="password" name="smtp_password"><br>
-				SMTP From/Reply To Email:<input type="text" name="smtp_from_email"><br>
-				SMTP From/Reply To Name:<input type="text" name="smtp_from_name"><br>
-				SMTP Subject:<input type="text" name="smtp_subject"><br>
-				<label>Attachment:<br> <input type="file" name="uploadedAttachmentFile"></label><br>
+				<?php $lang->printLabel(['SMTP STUBA Login:', 'SMTP STUBA Login:']);?><input type="text" name="smtp_username"><br>
+				<?php $lang->printLabel(['SMTP STUBA Heslo:', 'SMTP STUBA Password:']);?><input type="password" name="smtp_password"><br>
+				<?php $lang->printLabel(['SMTP From/Reply To E-mail:', 'SMTP From/Reply To E-mail:']);?><input type="text" name="smtp_from_email"><br>
+				<?php $lang->printLabel(['SMTP From/Reply To meno:', 'SMTP From/Reply To Name:']);?><input type="text" name="smtp_from_name"><br>
+				<?php $lang->printLabel(['SMTP Predmet správy:', 'SMTP Subject:']);?><input type="text" name="smtp_subject"><br>
+				<label><?php $lang->printLabel(['Príloha', 'Attachment:']);?><br> <input type="file" name="uploadedAttachmentFile"></label><br>
 				
-				<label>Html / plain text:<br>
+				<label><?php $lang->printLabel(['Html / čistý text:', 'Html / plain text:']);?><br>
                 <select name="text_type">
                     <option selected value="true">html</option>
-                    <option value="false">plain text</option>
+                    <option value="false"><?php $lang->printLabel(['čistý text', 'plain text:']);?></option>
                 </select></label><br><br>
 			</span>
                 <input type="submit" id="submitBtn" value="Submit">
@@ -210,7 +201,7 @@ if(isset($_FILES["uploadedFile"]))
 			<article id="work" class="wrapper style4">
 			
 			<span class="emailForm">
-			<h2>História</h2>
+			<h2>HistÃ³ria</h2>
 			<table id="historia" class="table table-hover table-sm" style="border-spacing: 10px">
 				<thead class="thead-dark">
 					<tr>
