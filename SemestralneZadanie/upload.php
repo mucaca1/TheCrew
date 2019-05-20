@@ -111,7 +111,8 @@ switch ($method) {
         }
         else if($request_type == "getDataForAdmin"){    //https://147.175.121.210:4159/SemestralneZadanie/upload.php/getDataForAdmin/Subject.subject_id
             $id = $request[1];
-            $sql = "SELECT t.teams_id FROM Subject s JOIN Teams t ON s.subject_id = t.subject_id WHERE s.subject_name = '" . $id . "'";
+            $acaYear = $request[2];
+            $sql = "SELECT Teams.teams_id FROM Teams LEFT JOIN Subject ON Teams.subject_id = Subject.subject_id WHERE Subject.year ='".$acaYear."'AND Subject.subject_id=".$id;
             $result = $conn->query($sql);
             $return_set;
             $team_number = array();
@@ -124,8 +125,8 @@ switch ($method) {
             $table_number = 0;
             foreach ($team_number as $team) {
 
-                $sql = "SELECT s.subject_name, s.year, t.admin_accept FROM Subject s JOIN Teams t ON t.subject_id = s.subject_id WHERE t.teams_id = " . $team . "";
-                
+                $sql = "SELECT s.subject_name, s.year, t.admin_accept FROM Subject s JOIN Teams t ON t.subject_id = s.subject_id WHERE t.teams_id =" . $team;
+
                 $return_set[$table_number]['team_id'] = $team;
                 $result = $conn->query($sql);
                 while($row = $result->fetch_assoc()){
@@ -148,12 +149,12 @@ switch ($method) {
                         $isPointsNull = true;
                     }
                 }
-                $sql = "SELECT u.id, u.username, u.email, ts.point, ts.agree, t.team_lider_id FROM Teams t JOIN Team_Student ts ON ts.team_id = t.teams_id JOIN users u ON u.id = ts.student_id WHERE t.teams_id = " . $team;
+                $sql = "SELECT u.id, u.full_name, u.email, ts.point, ts.agree, t.team_lider_id FROM Teams t JOIN Team_Student ts ON ts.team_id = t.teams_id JOIN users u ON u.id = ts.student_id WHERE t.teams_id = " . $team;
                 $result = $conn->query($sql);
                 $user_index = 0;
                 while($row = $result->fetch_assoc()){
                     $return_set[$table_number][$user_index]['id'] = $row['id'];
-                    $return_set[$table_number][$user_index]['username'] = $row['username'];
+                    $return_set[$table_number][$user_index]['full_name'] = $row['full_name'];
                     $return_set[$table_number][$user_index]['email'] = $row['email'];
                     if($isPointsNull){
                         //ak nemaju hodnotenie neviem nastavit.
@@ -210,60 +211,6 @@ switch ($method) {
                 $table_number++;
             } 
         }
-        else if($request_type == "showTable"){
-
-            $academicYear = $request[1];
-            $subjectName = $request[2];
-
-            $sqlSubjectID = "SELECT subject_id FROM Subject WHERE year='".$academicYear."' AND subject_name='".$subjectName."' LIMIT 1";
-            $resultSubjectID = $conn->query($sqlSubjectID);
-
-            echo $subjectName . " " . $academicYear;
-            echo "<br>";
-            echo "<br>";
-
-            if($resultSubjectID->num_rows > 0) {
-
-                $rowSubjectID = $resultSubjectID->fetch_assoc();
-
-                $sqlAllTeamIDs = "SELECT teams_id FROM Teams";
-                $resultAllTeamIDs = $conn->query($sqlAllTeamIDs);
-
-                if ($resultAllTeamIDs->num_rows > 0) {
-
-                    while ($rowAllTeamIDs = $resultAllTeamIDs->fetch_assoc()) {
-
-                        $sqlTable = "SELECT users.email, users.full_name, Team_Student.point, Team_Student.agree
-                        FROM users
-                        LEFT JOIN Team_Student ON Team_Student.student_id = users.id
-                        LEFT JOIN Teams ON Teams.teams_id = Team_Student.team_id WHERE Team_Student.team_id = '".$rowAllTeamIDs["teams_id"]."' AND Teams.subject_id='".$rowSubjectID["subject_id"]."'";
-                        $resultTable = $conn->query($sqlTable);
-
-                        if($resultTable->num_rows > 0) {
-
-                            echo "Team" . " " . $rowAllTeamIDs["teams_id"];
-//                            echo '<input type ="hidden" id="teamID" value ='.$rowAllTeamIDs["teams_id"].'>';
-                            echo "<br>";
-                            echo "Body:" . "<input type='number' id='points_".$rowAllTeamIDs["teams_id"]."'>";
-                            echo "<input type='button' id='changePoints_".$rowAllTeamIDs["teams_id"]."' name='changePoints' value='Change' onclick='setPoints(this)'>";
-                            echo "<table id='tableTable'>";
-                            echo "<tr><th>".Email."</th>";
-                            echo "<th>".Meno."</th>";
-                            echo "<th>".Body."</th>";
-                            echo "<th>".Suhlas."</th></tr>";
-
-                            if ($resultTable->num_rows > 0) {
-                                while ($rowTable = $resultTable->fetch_assoc()) {
-                                    echo "<tr><td>" . $rowTable["email"] . "</td><td>" . $rowTable["full_name"] . "</td><td>" . $rowTable["point"] . "</td><td>" . $rowTable["agree"] . "</td></tr>";
-                                }
-                            }
-                            echo "</table>";
-                            echo "<br>";
-                        }
-                    }
-                }
-            }
-        }
         break;
     }
     case 'POST':{
@@ -317,6 +264,20 @@ switch ($method) {
                 $return_set["sql"] = $sql;
                 $result = $conn->query($sql);
             }
+        }
+        else if($request_type == "adminChangePoints"){   //https://147.175.121.210:4159/SemestralneZadanie/upload.php/adminChangePoints/{body}/Teams.teams_id
+            $points = $request[1];
+            $team_id = $request[2];
+            $sql = "UPDATE Teams t SET t.points =".$points." WHERE t.teams_id =".$team_id;
+            $return_set["sql"] = $sql;
+            $result = $conn->query($sql);
+        }
+        else if($request_type == "adminAccept"){   //https://147.175.121.210:4159/SemestralneZadanie/upload.php/adminAccept/Teams.teams_id/{0 or 1}
+            $team_id = $request[1];
+            $decision = $request[2];
+            $sql = "UPDATE Teams t SET t.admin_accept =".$decision." WHERE t.teams_id =".$team_id;
+            $return_set["sql"] = $sql;
+            $result = $conn->query($sql);
         }
         break;
     }

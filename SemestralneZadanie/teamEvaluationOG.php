@@ -33,31 +33,6 @@ $result = $conn->query($sql);
     <link href="CSS/style.css" media="all" rel="stylesheet" type="text/css"/>
     <!--CSS pre tlac-->
     <link rel="stylesheet" href="./CSS/print-style.css" type="text/css" media="print,projection">
-
-    <style>
-        #tableTable {
-            font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
-            border-collapse: collapse;
-            width: 100%;
-        }
-
-        #tableTable td, #predmet_table th {
-            border: 1px solid #ddd;
-            padding: 8px;
-        }
-
-        #tableTable tr:nth-child(even){background-color: #f2f2f2;}
-
-        #tableTable tr:hover {background-color: #ddd;}
-
-        #tableTable th {
-            padding-top: 12px;
-            padding-bottom: 12px;
-            text-align: left;
-            background-color: #4CAF50;
-            color: white;
-        }
-    </style>
 </head>
 
 <?php
@@ -89,9 +64,7 @@ echo "<script> initText(document.getElementById('logoffButton'), 'logoff','".$la
 ?>
 <h1>The Crew</h1>
 <article>
-    <div class="content">
-    </div>
-
+    <h3>Upload</h3>
     <form action="teamEvaluationOG.php" method="post" enctype="multipart/form-data">
         <?php
         $currently_selected = date('Y');
@@ -104,7 +77,7 @@ echo "<script> initText(document.getElementById('logoffButton'), 'logoff','".$la
             $previousYear = $i-1;
 
             $academicYearLS = "LS-" . $i . "-" . "$previousYear";
-            $academicYearZS = "ZS-" . $i . "-" . "$previousYear";;
+            $academicYearZS = "ZS-" . $i . "-" . "$previousYear";
 
             echo '<option value="'.$academicYearLS.'">'.$academicYearLS.'</option>';
             echo '<option value="'.$academicYearZS.'">'.$academicYearZS.'</option>';
@@ -112,21 +85,23 @@ echo "<script> initText(document.getElementById('logoffButton'), 'logoff','".$la
         echo '</select>';
         ?>
         <br>
-        <p>Predmet: </p> <input type="text" name="subjectName">
+        <p>Predmet: <input type="text" name="subjectName"></p>
         <input type="file" name="fileToUpload" id="fileToUpload">
         <br>
-        <p>Delimiter: </p>
+        <p>Delimiter:
         <select name="delimiter">
             <option value="," selected>,</option>
             <option value=";">;</option>
         </select>
-        <br>
+        </p>
         <input type="submit" value="Upload" name="submit">
         <br>
+        <hr>
     </form>
 </article>
 <?php
 $target_dir = "/home/xkrc/public_html/SemestralneZadanie/CSV/";
+//$target_dir = "/home/xtranminhh/public_html/untitled1/";
 $target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
 $uploadOk = 1;
 
@@ -264,6 +239,7 @@ function readCSVFile($toRead,$dlm) {
     $earliest_year = 2000;
     $latest_year = date('Y');
 
+    echo "<h3>"."Zobrazenie tímov"."</h3>";
     echo 'Školský rok: ';
     echo '<select name="academicYear2">';
     echo '<option value="--">--</option>';
@@ -288,12 +264,12 @@ function readCSVFile($toRead,$dlm) {
             echo "Predmet: ";
             echo '<select name="subjectName2" id="subjectName2">';
 
-            $sqlSelSub = "SELECT subject_name FROM Subject WHERE year='" . $_POST['academicYear2'] . "'";
+            $sqlSelSub = "SELECT subject_name, subject_id FROM Subject WHERE year='" . $_POST['academicYear2'] . "'";
             $resultSelSub = $conn->query($sqlSelSub);
 
             if ($resultSelSub->num_rows > 0) {
                 while ($rowSelSub = $resultSelSub->fetch_assoc()) {
-                    echo '<option value="' . $rowSelSub['subject_name'] . '">' . $rowSelSub['subject_name'] . '</option>';
+                    echo '<option value="' . $rowSelSub['subject_id'] . '">' . $rowSelSub['subject_name'] . '</option>';
                 }
             }
             echo '</select>';
@@ -304,16 +280,131 @@ function readCSVFile($toRead,$dlm) {
 <script>
 
     base_url = 'https://147.175.121.210:4159/SemestralneZadanie/upload.php/';
+    // base_url = 'http://147.175.121.210:8136/untitled1/upload.php/';
 
     $("#show").click(function () {
+        loadTables();
+        setInterval(loadTables, 5000);
+    });
+
+    function loadTables(){
         $.ajax({
             type: 'GET',
-            url: base_url + "showTable/" + $("#academVal").val() + "/" + $("#subjectName2").val(),
+            url: base_url + "getDataForAdmin/" + $("#subjectName2").val() + "/" + $("#academVal").val(),
             success: function (msg) {
-                $("#output").html(msg);
+                // $("#output").html(msg);
+                document.getElementById("output").innerHTML = "";
+                var jpar = JSON.parse(msg);
+                var i = 0;
+                jpar.forEach(item => {
+                    if (i == 0) {
+                        var h = document.createElement('h3');
+                        h.innerHTML = item['subject_name'] + " " + item['year'];
+                        document.getElementById('output').appendChild(h);
+                        var hr = document.createElement('hr');
+                        document.getElementById('output').appendChild(hr);
+                    }
+                    makeTable(item['team_id'], item['subject_name'], item['year'], item['points'], item, item['admin_accept']);
+                    i++;
+                });
             }
         });
-    });
+    }
+
+    function makeTable(team_id, subject_name, year, points, row, ink){
+
+        var team = document.createElement('p');
+        team.innerHTML = "Tím "+ team_id;
+        document.getElementById('output').appendChild(team);
+        var p = document.createElement('p');
+
+        if(ink == true || ink == false){
+            p.innerHTML = "Body " + '<input type="number" id="fullPoints_'+team_id+'" value="'+points+'" disabled>' + " " + '<input type="button" id="changePoints_'+team_id+'" value="Change" onclick="setPoints(this)" disabled>';
+        }
+        else{
+            p.innerHTML = "Body " + '<input type="number" id="fullPoints_'+team_id+'" value="'+points+'">' + " " + '<input type="button" id="changePoints_'+team_id+'" value="Change" onclick="setPoints(this)">';
+        }
+        document.getElementById('output').appendChild(p);
+
+
+        if(ink != null){
+            var p2 = document.createElement('p');
+            if(ink == true){
+                p2.innerHTML = "Suhlasim s hodnotenim";
+            }
+            else{
+                p2.innerHTML = "Nesuhlasim s hodnotenim";
+            }
+            document.getElementById('output').appendChild(p2);
+        }
+        var table = document.createElement('table');
+        table.setAttribute("id", "predmet_table");
+        var head = document.createElement('thead');
+        head.innerHTML = "<tr><th>Meno</th><th>Email</th><th>Body</th><th>Odsúhlasenie bodov</th></tr>";
+        table.appendChild(head);
+        var body = document.createElement('tbody');
+
+        var i = 0;
+        while(row[i] != null)
+        {
+            let t = document.createElement('tr');
+            var text2 = "<small>-</small>";
+            if(row[i]['agree'] == true){
+                text2 = "<small>&#128077;</small>";
+            }
+            else if(row[i]['agree'] == false){
+                text2 = "<small>&#128078;</small>";
+            }
+
+            t.innerHTML = "<td>" + row[i]["full_name"] + "</td><td>" + row[i]["email"] + "</td><td>" + row[i]["point"] +"</td><td id = '"+row[i]["username"]+ team_id + "'>" + text2 + "</td>";
+            body.appendChild(t);
+            i++;
+        }
+        table.appendChild(body);
+        document.getElementById('output').appendChild(table);
+        if(points != null) {
+            if(ink == null) {
+                var adminDecision = document.createElement('p');
+                adminDecision.innerHTML = '<input type="button" id="acceptTeam_' + team_id + '_1" value="&#128077;" onclick="pointsDecision(this)">' + " " + '<input type="button" id="declineTeam_' + team_id + '_0" value="&#128078;" onclick="pointsDecision(this)">';
+                document.getElementById('output').appendChild(adminDecision);
+            }
+        }
+        var hr = document.createElement('hr');
+        document.getElementById('output').appendChild(hr);
+    }
+
+    function setPoints(data) {
+        console.log(data);
+        var a = data.id.split('_');
+        console.log(a);
+        var points = document.getElementById("fullPoints_"+a[1]).value;
+        console.log(points);
+        var team_id = a[1];
+
+        $.ajax({
+            type: 'POST',
+            url: base_url + 'adminChangePoints/' + points + "/" + team_id,
+            success: function(msg){
+                console.log(msg);
+            }
+        });
+    }
+
+    function pointsDecision(data) {
+        console.log(data);
+        var a = data.id.split('_');
+        console.log(a);
+        var team_id = a[1];
+        var decision = a[2];
+
+        $.ajax({
+            type: 'POST',
+            url: base_url + 'adminAccept/' + team_id + '/' + decision,
+            success: function(msg){
+                console.log(msg);
+            }
+        });
+    }
 </script>
 <footer>
     <p>&copy; The Crew 2019</p>
