@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <?php
 session_start();
+include_once 'easyPHPmultilang/easyPHPmultilang.php';
 //$_SESSION['accountID'] = 6;
 //ak nie je prihlaseny
 if(!isset($_SESSION['accountID'])){

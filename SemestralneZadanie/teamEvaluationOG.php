@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <?php
 session_start();
+include_once 'easyPHPmultilang/easyPHPmultilang.php';
 $language = "sk";
 if(isset($_SESSION['language'])){
     $language = $_SESSION['language'];
@@ -75,7 +76,7 @@ echo "<script> initText(document.getElementById('logoffButton'), 'logoff','".$la
         $earliest_year = 2000;
         $latest_year = date('Y');
 
-        echo "Školský rok: ". '<select name="academicYear">';
+        echo $lang->label(['Školský rok:', 'Accademic year']). '<select name="academicYear">';
         foreach ( range( $latest_year, $earliest_year ) as $i ) {
 
             $previousYear = $i-1;
@@ -89,10 +90,10 @@ echo "<script> initText(document.getElementById('logoffButton'), 'logoff','".$la
         echo '</select>';
         ?>
         <br>
-        <p>Predmet: <input type="text" name="subjectName"></p>
+        <p><?php $lang->printLabel(['Predmet:', 'Course:']);?><input type="text" name="subjectName"></p>
         <input type="file" name="fileToUpload" id="fileToUpload">
         <br>
-        <p>Delimiter:
+        <p><?php $lang->printLabel(['Delimiter:', 'Delimiter:']);?>
         <select name="delimiter">
             <option value="," selected>,</option>
             <option value=";">;</option>
@@ -104,7 +105,7 @@ echo "<script> initText(document.getElementById('logoffButton'), 'logoff','".$la
     </form>
 </article>
 <?php
-$target_dir = getcwd() . "/CSV/";
+$target_dir = "/CSV/";
 //$target_dir = "/home/xtranminhh/public_html/untitled1/";
 $target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
 $uploadOk = 1;
@@ -244,8 +245,8 @@ function readCSVFile($toRead,$dlm) {
     $earliest_year = 2000;
     $latest_year = date('Y');
 
-    echo "<h3>"."Zobrazenie tímov"."</h3>";
-    echo 'Školský rok: ';
+    echo "<h3>".$lang->label(['Zobrazenie tímov', 'Show teams'])."</h3>";
+    echo $lang->label(['Školský rok:', 'Accademic year:']);
     echo '<select name="academicYear2">';
     echo '<option value="--">--</option>';
     foreach ( range( $latest_year, $earliest_year ) as $i ) {
@@ -283,7 +284,8 @@ function readCSVFile($toRead,$dlm) {
     ?>
 <div id="output"></div>
 <script>
-    base_url = 'https://147.175.121.210:4159/SemestralneZadanie/upload.php/';
+
+    base_url = 'upload.php';
     // base_url = 'http://147.175.121.210:8136/untitled1/upload.php/';
 
     $("#show").click(function () {

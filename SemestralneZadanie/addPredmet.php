@@ -23,6 +23,7 @@ function updateDatabse() {
 <!DOCTYPE html>
 <?php
 session_start();
+include_once 'easyPHPmultilang/easyPHPmultilang.php';
 $language = "sk";
 if(isset($_SESSION['language'])){
     $language = $_SESSION['language'];
@@ -61,7 +62,7 @@ if(isset($_GET['language'])){
 
 <body>
     <?php
-	include "menubar.php";
+	//include "menubar.php";
 	echo "<script> document.getElementById('login_user_name').innerHTML='". $userInfo[0] ."' </script>";
     echo "<script> initText(document.getElementById('logoffButton'), 'logoff','".$language."') </script>";
 	?>

@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <?php
 session_start();
+include_once 'easyPHPmultilang/easyPHPmultilang.php';
 $language = "sk";
 if(isset($_SESSION['language'])){
     $language = $_SESSION['language'];
@@ -150,7 +151,7 @@ if(isset($_POST['username']) && isset($_POST['pass'])){
 
 
 <body>
-    <?php include "menubar.php";?>
+    <?php //include "menubar.php";?>
     <h1>The Crew</h1>
     <article>
         <div class="content">
