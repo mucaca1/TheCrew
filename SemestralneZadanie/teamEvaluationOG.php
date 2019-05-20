@@ -265,9 +265,11 @@ function readCSVFile($toRead,$dlm) {
     <br>
 </form>
     <input type='hidden' name='acaVal' value="<?php if($_POST['filter']) echo $_POST["academicYear2"]?>" id="academVal">
+    <br>
     <?php
         if($_POST['filter']) {
             echo $lang->label(['Predmet:', 'Subject:']);
+            echo "<br>";
             echo '<select name="subjectName2" id="subjectName2">';
 
             $sqlSelSub = "SELECT subject_name, subject_id FROM Subject WHERE year='" . $_POST['academicYear2'] . "'";

@@ -97,9 +97,11 @@ echo "<script> initText(document.getElementById('logoffButton'), 'logoff','".$la
         <br>
     </form>
     <input type='hidden' name='acaVal' value="<?php if($_POST['filter']) echo $_POST["academicYear2"]?>" id="academVal">
+    <br>
     <?php
     if($_POST['filter']) {
         echo $lang->label(['Predmet:', 'Subject:']);
+        echo '<br>';
         echo '<select name="subjectName2" id="subjectName2">';
 
         $sqlSelSub = "SELECT subject_name, subject_id FROM Subject WHERE year='" . $_POST['academicYear2'] . "'";
@@ -111,12 +113,13 @@ echo "<script> initText(document.getElementById('logoffButton'), 'logoff','".$la
             }
         }
         echo '</select>';
+        echo '<br>';
         echo '<input type="button" value="Show" name="showCharts" id="showCharts">';
     }
     ?>
 </article>
-<div id="piechart" style="width: 700px; height: 400px;"></div>
-<div id="piechart1" style="width: 700px; height: 400px;"></div>
+<div id="piechart" style="width: 100%; height: 400px;"></div>
+<div id="piechart1" style="width: 100%; height: 400px;"></div>
 <script>
     base_url = 'https://147.175.121.210:4159/SemestralneZadanie/upload.php/';
     // base_url = 'http://147.175.121.210:8136/untitled1/upload.php/';
@@ -188,8 +191,8 @@ echo "<script> initText(document.getElementById('logoffButton'), 'logoff','".$la
         chart.draw(data, options);
     }
 </script>
-<footer>
-    <p>&copy; The Crew 2019 - Lendáč, Krč, Szalay, Czerwinski, Tran Minh</p>
+<footer style="text-align: center">
+    <?php include "footer.php"?>
 </footer>
 </body>
 </html>
