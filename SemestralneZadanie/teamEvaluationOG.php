@@ -105,7 +105,7 @@ echo "<script> initText(document.getElementById('logoffButton'), 'logoff','".$la
     </form>
 </article>
 <?php
-$target_dir = "/CSV/";
+$target_dir = "/home/xkrc/public_html/SemestralneZadanie/CSV/";
 //$target_dir = "/home/xtranminhh/public_html/untitled1/";
 $target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
 $uploadOk = 1;
@@ -267,7 +267,7 @@ function readCSVFile($toRead,$dlm) {
     <input type='hidden' name='acaVal' value="<?php if($_POST['filter']) echo $_POST["academicYear2"]?>" id="academVal">
     <?php
         if($_POST['filter']) {
-            echo "Predmet: ";
+            echo $lang->label(['Predmet:', 'Subject:']);
             echo '<select name="subjectName2" id="subjectName2">';
 
             $sqlSelSub = "SELECT subject_name, subject_id FROM Subject WHERE year='" . $_POST['academicYear2'] . "'";
@@ -285,7 +285,7 @@ function readCSVFile($toRead,$dlm) {
 <div id="output"></div>
 <script>
 
-    base_url = 'upload.php';
+    base_url = 'https://147.175.121.210:4159/SemestralneZadanie/upload.php/';
     // base_url = 'http://147.175.121.210:8136/untitled1/upload.php/';
 
     $("#show").click(function () {

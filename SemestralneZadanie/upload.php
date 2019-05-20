@@ -47,13 +47,12 @@ switch ($method) {
                         $isPointsNull = true;
                     }
                 }
-                $sql = "SELECT u.id, u.username, u.full_name, u.email, ts.point, ts.agree, t.team_lider_id FROM Teams t JOIN Team_Student ts ON ts.team_id = t.teams_id JOIN users u ON u.id = ts.student_id WHERE t.teams_id = " . $team;
+                $sql = "SELECT u.id, u.username, u.email, ts.point, ts.agree, t.team_lider_id FROM Teams t JOIN Team_Student ts ON ts.team_id = t.teams_id JOIN users u ON u.id = ts.student_id WHERE t.teams_id = " . $team;
                 $result = $conn->query($sql);
                 $user_index = 0;
                 while($row = $result->fetch_assoc()){
                     $return_set[$table_number][$user_index]['id'] = $row['id'];
                     $return_set[$table_number][$user_index]['username'] = $row['username'];
-                    $return_set[$table_number][$user_index]['full_name'] = $row['full_name'];
                     $return_set[$table_number][$user_index]['email'] = $row['email'];
                     if($isPointsNull){
                         //ak nemaju hodnotenie neviem nastavit.
@@ -211,6 +210,48 @@ switch ($method) {
                 }
                 $table_number++;
             } 
+        }
+        else if($request_type == "getCharts"){
+            $subject_id = $request[1];
+            $sql = "SELECT COUNT(student_id) as studInSub FROM `Team_Student` LEFT JOIN Teams ON Teams.teams_id=Team_Student.team_id LEFT JOIN Subject ON Subject.subject_id = Teams.subject_id WHERE Subject.subject_id =".$subject_id;
+            $result = $conn->query($sql);
+            $row = $result->fetch_assoc();
+            $return_set['studInSub']=$row['studInSub'];
+
+            $sql1 = "SELECT COUNT(student_id) as studAgree FROM `Team_Student` LEFT JOIN Teams ON Teams.teams_id=Team_Student.team_id LEFT JOIN Subject ON Subject.subject_id = Teams.subject_id WHERE Subject.subject_id =".$subject_id." AND Team_Student.agree=1";
+            $result1 = $conn->query($sql1);
+            $row1 = $result1->fetch_assoc();
+            $return_set['studAgree']=$row1['studAgree'];
+
+            $sql2 = "SELECT COUNT(student_id) as studDisagree FROM `Team_Student` LEFT JOIN Teams ON Teams.teams_id=Team_Student.team_id LEFT JOIN Subject ON Subject.subject_id = Teams.subject_id WHERE Subject.subject_id =".$subject_id." AND Team_Student.agree=0";
+            $result2 = $conn->query($sql2);
+            $row2 = $result2->fetch_assoc();
+            $return_set['studDisagree']=$row2['studDisagree'];
+
+            $sql3 = "SELECT COUNT(student_id) as studNull FROM `Team_Student` LEFT JOIN Teams ON Teams.teams_id=Team_Student.team_id LEFT JOIN Subject ON Subject.subject_id = Teams.subject_id WHERE Subject.subject_id =".$subject_id." AND Team_Student.agree IS NULL";
+            $result3 = $conn->query($sql3);
+            $row3 = $result3->fetch_assoc();
+            $return_set['studNull']=$row3['studNull'];
+
+            $sql4 = "SELECT COUNT(teams_id) as teamsInSub FROM Teams WHERE subject_id =".$subject_id;
+            $result4 = $conn->query($sql4);
+            $row4 = $result4->fetch_assoc();
+            $return_set['teamsInSub']=$row4['teamsInSub'];
+
+            $sql5 = "SELECT COUNT(teams_id) as teamsDone FROM Teams WHERE subject_id =".$subject_id." AND admin_accept IS NOT NULL";
+            $result5 = $conn->query($sql5);
+            $row5 = $result5->fetch_assoc();
+            $return_set['teamsDone']=$row5['teamsDone'];
+
+            $sql6 = "SELECT COUNT(teams_id) as teamsOpen FROM Teams WHERE subject_id =".$subject_id." AND admin_accept IS NULL";
+            $result6 = $conn->query($sql6);
+            $row6 = $result6->fetch_assoc();
+            $return_set['teamsOpen']=$row6['teamsOpen'];
+
+            $sql7 = "SELECT COUNT(DISTINCT(Team_Student.team_id)) as teamsWithNull FROM Team_Student LEFT JOIN Teams ON Team_Student.team_id = Teams.teams_id LEFT JOIN Subject ON Subject.subject_id = Teams.subject_id WHERE Subject.subject_id = ".$subject_id." AND Team_Student.agree IS NULL";
+            $result7 = $conn->query($sql7);
+            $row7 = $result7->fetch_assoc();
+            $return_set['teamsWithNull']=$row7['teamsWithNull'];
         }
         break;
     }
