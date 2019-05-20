@@ -129,7 +129,15 @@ function checkSum(obj){
     var sum = 0;
     for(let index = 0; index < points.length; index++)
     {
-        sum += parseInt(points[index].value,10);
+        if(Number.isInteger(points[index].value)){
+            sum += parseInt(points[index].value,10);
+        }
+        else{
+            console.log("bad");
+            obj.style.border = "thick solid #FF0000";
+            return;
+        }
+        
     }
     var max = parseInt(document.getElementById("full_points_" + cl[1].split('_')[1]).textContent,10);
     if(sum <= max){
