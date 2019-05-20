@@ -283,8 +283,7 @@ function readCSVFile($toRead,$dlm) {
     ?>
 <div id="output"></div>
 <script>
-
-    base_url = 'upload.php';
+    base_url = 'https://147.175.121.210:4159/SemestralneZadanie/upload.php/';
     // base_url = 'http://147.175.121.210:8136/untitled1/upload.php/';
 
     $("#show").click(function () {
