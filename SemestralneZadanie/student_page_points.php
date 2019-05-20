@@ -82,7 +82,7 @@ if(isset($_GET['language'])){
     <?php
 	include "menubar.php";
 	echo "<script> document.getElementById('login_user_name').innerHTML='". $userInfo[0] ."' </script>";
-    echo "<script> initText(document.getElementById('logoffButton'), 'logoff','".$language."') </script>";
+    //echo "<script> initText(document.getElementById('logoffButton'), 'logoff','".$language."') </script>";
 	?>
     <h1>The Crew</h1>
     <article>
