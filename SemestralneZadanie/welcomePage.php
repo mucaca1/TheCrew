@@ -77,6 +77,7 @@ include_once 'easyPHPmultilang/easyPHPmultilang.php';
             <a href="<?php if($type == 'student'){ echo 'student_page.php'; }else{ echo 'admin_page.php'; } ?>"><button><?php $lang->printLabel(['Body predmetov', 'Points from subjects']);?></button></a>
             <?php
                 if($type != 'student'){
+                    echo "<a href='charts.php'><button>".$lang->label(['Štatisiky', 'Statictics'])."</button></a>";
                     echo "<a href='templateEditor.php'><button>".$lang->label(['Editor mailov', 'Mail editor'])."</button></a>";
                     echo "<a href='credentialMgmt.php'><button>".$lang->label(['Manažér mailov', 'Mail manager'])."</button></a>";
                 }

@@ -84,7 +84,7 @@ session_start();
     <article id="work" class="wrapper style4">
         <div id="table"></div>
     </div>
-        
+
     <?php include "footer.php"?>
     </article>
     

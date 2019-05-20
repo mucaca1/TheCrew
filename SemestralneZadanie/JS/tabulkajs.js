@@ -22,10 +22,10 @@ log = [
     [false, false, false, false, true],
     [false, false, true, false, false],
     [false, true, false, false, false],
-    [true, false, true, false, false],
+    [true, true, true, false, false],
     [false, false, true, false, false],
     [true, false, false, false, false],
-    [true, false, false, false, false]
+    [true, true, false, false, false]
 ];
 
 function createTable(){
@@ -55,8 +55,10 @@ function createTable(){
                 if(log[r-1][s-1] == true){
                     ch.innerHTML = "x";
                     ch.checked = true;
+                    stlpec.setAttribute('bgcolor', '#2f2b40');   
                 }
-                ch.disabled = true;                
+                ch.disabled = true;   
+                          
                 stlpec.appendChild(ch);
             }
             
