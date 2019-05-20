@@ -31,6 +31,8 @@ $result = $conn->query($sql);
 
     <!--Zakladne CSS-->
     <link href="CSS/style.css" media="all" rel="stylesheet" type="text/css"/>
+    <link href="./CSS/main.css" media="all" rel="stylesheet" type="text/css"/>
+    <link href="./CSS/font-awesome.min.css" media="all" rel="stylesheet" type="text/css"/>
     <!--CSS pre tlac-->
     <link rel="stylesheet" href="./CSS/print-style.css" type="text/css" media="print,projection">
 </head>
@@ -59,11 +61,13 @@ $result = $conn->query($sql);
 <body>
 <?php
 include "menubar.php";
-echo "<script> document.getElementById('login_user_name').innerHTML='". $userInfo[0] ."' </script>";
+echo "<script> document.getElementById('login_user_name').innerHTML='Home (". $userInfo[0] .")' </script>";
 echo "<script> initText(document.getElementById('logoffButton'), 'logoff','".$language."') </script>";
 ?>
-<h1>The Crew</h1>
-<article>
+<article id="work" class="wrapper style1" style="padding: 5em 0 5em 0">
+	    <h1>The Crew</h1>
+</article>
+<article id="work" class="wrapper style2">
     <h3>Upload</h3>
     <form action="teamEvaluationOG.php" method="post" enctype="multipart/form-data">
         <?php
@@ -100,7 +104,7 @@ echo "<script> initText(document.getElementById('logoffButton'), 'logoff','".$la
     </form>
 </article>
 <?php
-$target_dir = "/home/xkrc/public_html/SemestralneZadanie/CSV/";
+$target_dir = "/CSV/";
 //$target_dir = "/home/xtranminhh/public_html/untitled1/";
 $target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
 $uploadOk = 1;
@@ -232,6 +236,7 @@ function readCSVFile($toRead,$dlm) {
     return $csvArray;
 }
 ?>
+<article id="work" class="wrapper style2">
 
 <form action="teamEvaluationOG.php" method="post" enctype="multipart/form-data">
     <?php
@@ -279,7 +284,7 @@ function readCSVFile($toRead,$dlm) {
 <div id="output"></div>
 <script>
 
-    base_url = 'https://147.175.121.210:4159/SemestralneZadanie/upload.php/';
+    base_url = 'upload.php';
     // base_url = 'http://147.175.121.210:8136/untitled1/upload.php/';
 
     $("#show").click(function () {
@@ -406,8 +411,7 @@ function readCSVFile($toRead,$dlm) {
         });
     }
 </script>
-<footer>
-    <p>&copy; The Crew 2019</p>
-</footer>
+    <?php include "footer.php"?>
+</article>
 </body>
 </html>
