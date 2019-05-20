@@ -23,6 +23,8 @@ To install https://github.com/PHPMailer/PHPMailer (required) do "composer requir
 
 https://datatables.net/ included in JS and CSS
 
+https://github.com/ezhmd/PHP-easy-multilanguage included
+
 add folder with 777 permissions /uploads
 
 Import included .sql (in /sql_exports) to database as tables of the same name as filenames.
