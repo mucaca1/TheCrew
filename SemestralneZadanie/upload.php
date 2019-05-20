@@ -47,12 +47,13 @@ switch ($method) {
                         $isPointsNull = true;
                     }
                 }
-                $sql = "SELECT u.id, u.username, u.email, ts.point, ts.agree, t.team_lider_id FROM Teams t JOIN Team_Student ts ON ts.team_id = t.teams_id JOIN users u ON u.id = ts.student_id WHERE t.teams_id = " . $team;
+                $sql = "SELECT u.id, u.username, u.full_name, u.email, ts.point, ts.agree, t.team_lider_id FROM Teams t JOIN Team_Student ts ON ts.team_id = t.teams_id JOIN users u ON u.id = ts.student_id WHERE t.teams_id = " . $team;
                 $result = $conn->query($sql);
                 $user_index = 0;
                 while($row = $result->fetch_assoc()){
                     $return_set[$table_number][$user_index]['id'] = $row['id'];
                     $return_set[$table_number][$user_index]['username'] = $row['username'];
+                    $return_set[$table_number][$user_index]['full_name'] = $row['full_name'];
                     $return_set[$table_number][$user_index]['email'] = $row['email'];
                     if($isPointsNull){
                         //ak nemaju hodnotenie neviem nastavit.

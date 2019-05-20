@@ -244,8 +244,18 @@ function createDynamicTable(team_id, subject_name, year, points, row, ink){
                 text2 = "<small>Nesuhlasim</small>";
             }
         }
+        if(row[i]["full_name"] != null){
+            if(row[i]["full_name"] != ""){
+                t.innerHTML = "<td>" + row[i]["full_name"] + "</td><td>" + row[i]["email"] + "</td><td>" + text +"</td><td id = '"+row[i]["username"]+ team_id + "'>" + text2 + "</td>";
+            }
+            else{
+                t.innerHTML = "<td>" + row[i]["username"] + "</td><td>" + row[i]["email"] + "</td><td>" + text +"</td><td id = '"+row[i]["username"]+ team_id + "'>" + text2 + "</td>";
+            }
+        }
+        else{
+            t.innerHTML = "<td>" + row[i]["username"] + "</td><td>" + row[i]["email"] + "</td><td>" + text +"</td><td id = '"+row[i]["username"]+ team_id + "'>" + text2 + "</td>";
+        }
         
-        t.innerHTML = "<td>" + row[i]["username"] + "</td><td>" + row[i]["email"] + "</td><td>" + text +"</td><td id = '"+row[i]["username"]+ team_id + "'>" + text2 + "</td>";
         body.appendChild(t);
         //document.write("<tr><td>" + (i+1) + "</td><td>" + row[i][0] + "</td><td>" + row[i][1] +"</td></tr>");
         i++;

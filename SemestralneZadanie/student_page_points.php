@@ -91,6 +91,7 @@ if(isset($_GET['language'])){
 	    <h1>The Crew</h1>
     </article>
     <article id="work" class="wrapper style2">
+    <div id="content"></div>
         <?php
         /*    $sql = "SELECT u.number FROM users u WHERE u.id = " . $_SESSION['accountID'] . " LIMIT 1";
             $result = $conn->query($sql);
