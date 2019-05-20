@@ -201,7 +201,7 @@ if(isset($_FILES["uploadedFile"]))
 			<article id="work" class="wrapper style4">
 			
 			<span class="emailForm">
-			<h2>HistÃ³ria</h2>
+			<h2><?php $lang->printLabel(['História odoslaných e-mailov:', 'History of sent e-mails:']);?></h2>
 			<table id="historia" class="table table-hover table-sm" style="border-spacing: 10px">
 				<thead class="thead-dark">
 					<tr>
