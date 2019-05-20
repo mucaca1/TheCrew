@@ -18,7 +18,7 @@ if(isset($_GET['language'])){
         
         $sql = "SELECT l.text FROM language l WHERE l.page_name='" . $page_name[0] . ".title' AND l.language='" . $language . "'";
         $result = $conn->query($sql);
-    ?>
+?>
 <html lang="<?php echo $language ?>">
 <head>
     <link rel="icon" href="data:;base64,=">
@@ -36,10 +36,12 @@ if(isset($_GET['language'])){
 </script>
 <script src="./lang/jquery.MultiLanguage.min.js"></script>
     
-    <title>WelcomePage</title>
+    <title>Welcome Page</title>
         
     <!--Zakladne CSS-->
     <link href="./CSS/style.css" media="all" rel="stylesheet" type="text/css"/>
+    <link href="./CSS/main.css" media="all" rel="stylesheet" type="text/css"/>
+    <link href="./CSS/font-awesome.min.css" media="all" rel="stylesheet" type="text/css"/>
     <link href="./CSS/buttn.css" media="all" rel="stylesheet" type="text/css"/>
     <!--CSS pre tlac-->
     <link rel="stylesheet" href="./CSS/print-style.css" type="text/css" media="print,projection">
@@ -70,27 +72,25 @@ if(isset($_GET['language'])){
 <body>
     <?php
     include "menubar.php";
-    echo "<script> document.getElementById('login_user_name').innerHTML='". $userInfo[0] ."' </script>";
+    echo "<script> document.getElementById('login_user_name').innerHTML='Home (". $userInfo[0] .")' </script>";
     echo "<script> initText(document.getElementById('logoffButton'), 'logoff','".$language."') </script>";
     ?>
     
-    <h1>The Crew</h1>
-    <article>
-        <div class="content">
-            <a href="https://147.175.121.210:4159/SemestralneZadanie/<?php if($type == 'student'){ echo 'student_page_points.php'; }else{ echo 'teamEvaluationOG.php'; } ?>"><button id='welcomePage_teams'>Prezeranie timv</button></a>
-            <a href="https://147.175.121.210:4159/SemestralneZadanie/<?php if($type == 'student'){ echo 'student_page.php'; }else{ echo 'admin_page.php'; } ?>"><button id='welcomePage_points'>Body</button></a>
+    <article id="work" class="wrapper style1" style="padding: 5em 0 5em 0">
+	    <h1>The Crew</h1>
+    </article>
+    <article id="work" class="wrapper style2">
+        <div class="container">
+            <a href="<?php if($type == 'student'){ echo 'student_page_points.php'; }else{ echo 'teamEvaluationOG.php'; } ?>"><button id='welcomePage_teams'>Prezeranie timov</button></a>
+            <a href="<?php if($type == 'student'){ echo 'student_page.php'; }else{ echo 'admin_page.php'; } ?>"><button id='welcomePage_points'>Body</button></a>
             <?php
                 if($type != 'student'){
-                    echo "<a href='https://147.175.121.210:4159/SemestralneZadanie/templateEditor.php'><button id='welcomePage_mailEditor'>Mail Editor</button></a>";
-                    echo "<a href='https://147.175.121.210:4159/SemestralneZadanie/credentialMgmt.php'><button id='welcomePage_mailManager'>Mail Manager</button></a>";
+                    echo "<a href='templateEditor.php'><button id='welcomePage_mailEditor'>Mail Template Editor</button></a>";
+                    echo "<a href='credentialMgmt.php'><button id='welcomePage_mailManager'>Credential Management</button></a>";
                 }
             ?>
         </div>
+        <?php include "footer.php"?>
     </article>
-    
-
-    <footer>
-    <p>&copy; The Crew 2019 - Lendáč, Krč, Szalay, Czerwinski, Tran Minh</p>
-    </footer>
 </body>
 </html>

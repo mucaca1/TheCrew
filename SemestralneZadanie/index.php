@@ -25,7 +25,11 @@ if(isset($_GET['language'])){
     <meta charset="utf-8">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
     <script src="./JS/script.js"></script>
-    
+	<script src="./JS/jquery.scrolly.min.js"></script>
+	<script src="./JS/browser.min.js"></script>
+	<script src="./JS/breakpoints.min.js"></script>
+	<script src="./JS/util.js"></script>
+	<script src="./JS/main.js"></script>
     <script src="./JS/tabulkajs.js"></script>
     
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -43,18 +47,29 @@ if(isset($_GET['language'])){
 
     <!--Zakladne CSS-->
     <link href="./CSS/style.css" media="all" rel="stylesheet" type="text/css"/>
+    <link href="./CSS/main.css" media="all" rel="stylesheet" type="text/css"/>
+    <link href="./CSS/font-awesome.min.css" media="all" rel="stylesheet" type="text/css"/>
     <link href="./CSS/form.css" media="all" rel="stylesheet" type="text/css"/>
     <!--CSS pre tlac-->
     <link rel="stylesheet" href="./CSS/print-style.css" type="text/css" media="print,projection">
 </head>
 
-<body onload="createTable();">
-    <?php include "menubar.php";?>
-    <h1>The Crew</h1>
-    <article>
-        <div class="content">
+<body class="is-preload" onload="createTable();">
+    <!--Rozdielny nav pre index page-->
+    <nav id='nav'>
+          <ul>
+            <li><a href='./" . $page_name[0] . ".php?language=sk' onclick = 'skLang();'>SK</a></li>
+            <li><a href='./" . $page_name[0] . ".php?language=en' onclick = 'enLang();'>EN</a></li>
+          </ul>
+    </nav>
+
+    <article id="work" class="wrapper style1" style="padding: 5em 0 5em 0">
+	    <h1>The Crew</h1>
+    </article>
+    <article id="work" class="wrapper style2">
+        <div class="container">
             <h2></h2>
-        <form action="./authentification.php" method="post">
+        <form action="authentification.php" method="post">
             <?php
             if(isset($_GET['invalid_pass'])){
                 echo "<div id='index_passwordStatusText'></div>";
@@ -72,14 +87,13 @@ if(isset($_GET['language'])){
             <br>
             <button type="submit" id="index_submit"></button>
         </form>
-
-        <div id="table" class="centerd"></div>
-        </div>
+    </article>
+    <article id="work" class="wrapper style4">
+        <div id="table"></div>
+    </div>
+        
+    <?php include "footer.php"?>
     </article>
     
-
-    <footer>
-        <p>&copy; The Crew 2019 - Lendáč, Krč, Szalay, Czerwinski, Tran Minh</p>
-    </footer>
 </body>
 </html>

@@ -2,7 +2,6 @@ var mainId;
 var interval;
 var lang;
 
-
 function setId(id){
     mainId = id;
 }
@@ -338,4 +337,23 @@ function updateTables(team_id, subject_name, year, points, row, ink){
     }
     enableButton();
     disableButton();
+}
+//pre credentialMgmt
+var emailElements = document.getElementsByClassName("emailForm");
+function initRadioHandler()
+{
+    for(var j = 0; j < emailElements.length; j++)
+        emailElements[j].style.display = "none";
+    var btns = document.getElementsByName("action");
+    for(var i = 0; i < btns.length; i++)
+    {
+        btns[i].onclick = function(){
+            if(this.value == "email")
+                for(var j = 0; j < emailElements.length; j++)
+                    emailElements[j].style.display = "initial";
+            else
+                for(var j = 0; j < emailElements.length; j++)
+                    emailElements[j].style.display = "none";
+        };
+    }
 }

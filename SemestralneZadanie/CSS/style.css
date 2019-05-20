@@ -1,9 +1,13 @@
+/*
 article{
   margin: 20px;
+}*/ 
+
+#historia_wrapper{
+  display: inline-block;
 }
 
-
-ul {
+#historia_wrapper ul {
     list-style-type: none;
     margin: 0;
     padding: 0;
@@ -11,11 +15,11 @@ ul {
     background-color: #333;
   }
   
-  li {
+  #historia_wrapper li {
     float: left;
   }
   
-  li a {
+  #historia_wrapper li a {
     display: block;
     color: white;
     text-align: center;
@@ -23,13 +27,17 @@ ul {
     text-decoration: none;
   }
   
-  /* Change the link color to #111 (black) on hover */
-  li a:hover {
+  #historia_wrapper li a:hover {
     background-color: #111;
   }
+
+  #historia_paginate {
+    display: inline-block;
+  }
+  /*
   .active {
     background-color: #4CAF50;
-  }
+  }*/
 
   #predmet_table {
     font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;

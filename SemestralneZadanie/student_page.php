@@ -35,7 +35,9 @@ if(isset($_GET['language'])){
     <title><?php while($row = $result->fetch_assoc()){ echo $row['text']; } ?></title>
         
     <!--Zakladne CSS-->
-    <link href="./CSS/style.css" media="all" rel="stylesheet" type="text/css"/>
+	<link href="./CSS/style.css" media="all" rel="stylesheet" type="text/css"/>
+	<link href="./CSS/main.css" media="all" rel="stylesheet" type="text/css"/>
+    <link href="./CSS/font-awesome.min.css" media="all" rel="stylesheet" type="text/css"/>
     <!--CSS pre tlac-->
     <link rel="stylesheet" href="./CSS/print-style.css" type="text/css" media="print,projection">
 </head>
@@ -65,13 +67,11 @@ if(isset($_GET['language'])){
 <body>
     <?php
 	include "menubar.php";
-	echo "<script> document.getElementById('login_user_name').innerHTML='". $userInfo[0] ."' </script>";
+	echo "<script> document.getElementById('login_user_name').innerHTML='Home (". $userInfo[0] .")' </script>";
     echo "<script> initText(document.getElementById('logoffButton'), 'logoff','".$language."') </script>";
 	?>
-    <h1>The Crew</h1>
-    <article>
-        <div class="content">
-        </div>
+    <article id="work" class="wrapper style1" style="padding: 5em 0 5em 0">
+	    <h1>The Crew</h1>
     </article>
 <!--	<form action="send_id.php" method="post" enctype="multipart/form-data">
 	<div id='studentIDText'><script>initText(document.getElementById('studentIDText'),'".$page_name[0].".studentId', '".$language."')</script><br><!-- ID studenta: -->
@@ -79,6 +79,7 @@ if(isset($_GET['language'])){
 	<input type="submit" value="Submit" name="submit"><br>
 	
 	</form>-->
+	<article id="work" class="wrapper style2">
     <?php
 	$id_studenta = $userInfo[2];
 	echo $id_studenta;
@@ -126,9 +127,7 @@ if(isset($_GET['language'])){
 		echo "<br>";
 	}
 	?>
-
-    <footer>
-	<p>&copy; The Crew 2019 - Lendáč, Krč, Szalay, Czerwinski, Tran Minh</p>
-    </footer>
+		<?php include "footer.php"?>
+	</article>
 </body>
 </html>

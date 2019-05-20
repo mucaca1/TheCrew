@@ -19,7 +19,28 @@ if(isset($_GET['language'])){
         
         $sql = "SELECT l.text FROM language l WHERE l.page_name='" . $page_name[0] . ".title' AND l.language='" . $language . "'";
         $result = $conn->query($sql);
-    ?>
+?>
+<?php
+//ak nie je prihlaseny
+    if(!isset($_SESSION['accountID'])){
+        //echo $_SESSION['accountID'];
+        header("Location:index.php");
+    }
+    else{
+        //ak je tak zober vsetky data co viem.
+        $sql = "SELECT u.username, u.email, u.number, u.type FROM users u WHERE u.id='" . $_SESSION['accountID'] . "'";
+        $userInfo = array();
+        $result = $conn->query($sql);
+        while( $row = $result->fetch_assoc() ) {
+            array_push($userInfo, $row['username']);
+            array_push($userInfo, $row['email']);
+            array_push($userInfo, $row['number']);
+            array_push($userInfo, $row['type']);
+
+            $type = $row['type'];
+        }
+    }
+?>
 	
 <html lang="<?php echo $language ?>">
 <head>
@@ -36,6 +57,8 @@ if(isset($_GET['language'])){
         
     <!--Zakladne CSS-->
     <link href="./CSS/style.css" media="all" rel="stylesheet" type="text/css"/>
+    <link href="./CSS/main.css" media="all" rel="stylesheet" type="text/css"/>
+    <link href="./CSS/font-awesome.min.css" media="all" rel="stylesheet" type="text/css"/>
     <!--CSS pre tlac-->
     <link rel="stylesheet" href="./CSS/print-style.css" type="text/css" media="print,projection">
 </head>
@@ -65,15 +88,13 @@ if(isset($_GET['language'])){
 <body>
     <?php
 	include "menubar.php";
-	echo "<script> document.getElementById('login_user_name').innerHTML='". $userInfo[0] ."' </script>";
+	echo "<script> document.getElementById('login_user_name').innerHTML='Home (". $userInfo[0] .")' </script>";
     echo "<script> initText(document.getElementById('logoffButton'), 'logoff','".$language."') </script>";
 	?>
-    <h1>The Crew</h1>
-    <article>
-        <div class="content">
-        </div>
+    <article id="work" class="wrapper style1" style="padding: 5em 0 5em 0">
+	    <h1>The Crew</h1>
     </article>
-	
+	<article id="work" class="wrapper style2">
 	<form action="addPredmet.php" method="post" enctype="multipart/form-data">
 	<h3><div id='pridaniePredmetuText'>Pridanie predmetu</h3><!-- Pridanie Predmetu -->
 	<div id='skolskyRokText'>Školský rok<br><!-- Skolsky rok: -->
@@ -81,8 +102,8 @@ if(isset($_GET['language'])){
 	<div id='nazovPredmetuText'>Názov predmetu<br><!-- Nazov predmetu: --><br>
 	<input type="text" name="nazov_predmetu" id="nazov_predmetu"><br>
 	<div id='CSVSuborText'>CSV Súbor<br><!-- CSV subor: --><br><br>
-	<input type="file" name="csv_subor" id="csv_subor"><br>
-	<div id='oddelovacText'>Oddelovač csv<br><!-- Oddelovac csv suboru: --><br><br><br>
+	<input type="file" name="csv_subor" id="csv_subor"><br><br><br>
+	<div id='oddelovacText'>Oddelovač csv<br><!-- Oddelovac csv suboru: --><br>
 	<input type="text" name="oddelovac_csv" id="oddelovac_csv"><br>
 	
 	<input type="submit" value="Submit" name="submit"><br>
@@ -182,8 +203,7 @@ if(isset($_GET['language'])){
         }
 	</script>
 
-    <footer>
-    <p>&copy; The Crew 2019 - Lendáč, Krč, Szalay, Czerwinski, Tran Minh</p>
-    </footer>
+    <?php include "footer.php"?>
+    </article>
 </body>
 </html>

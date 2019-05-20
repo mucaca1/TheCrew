@@ -1,5 +1,5 @@
 team = [
-    "Praca","Matej", "Ľuboš", "Igor", "Greg", "Andrej"
+    "Práca","Matej", "Ľuboš", "Igor", "Greg", "Andrej"
 ];
 
 praca = [
@@ -10,7 +10,8 @@ praca = [
     "Úloha 3 Generovanie hesiel",
     "Úloha 3 Rozposielanie emailov",
     "Úloha finalizácia",
-    "Úloha Prihlasovanie",
+    "Úloha dizajn",
+    "Úloha prihlasovanie",
     "Úloha multijazyčnosť"
 ];
 
@@ -21,7 +22,8 @@ log = [
     [false, false, false, false, true],
     [false, false, true, false, false],
     [false, true, false, false, false],
-    [true, false, false, false, false],
+    [true, false, true, false, false],
+    [false, false, true, false, false],
     [true, false, false, false, false],
     [true, false, false, false, false]
 ];
@@ -29,7 +31,7 @@ log = [
 function createTable(){
     var  tabulka = document.createElement('table');
 
-    let riad = 10;
+    let riad = 11;
     let stl = 6;
     for(let r = 0; r < riad; r++){
         let riadok = document.createElement('tr');
@@ -51,9 +53,10 @@ function createTable(){
                 let ch = document.createElement('input');
                 ch.type = "checkbox";
                 if(log[r-1][s-1] == true){
+                    ch.innerHTML = "x";
                     ch.checked = true;
                 }
-                ch.disabled = true;
+                ch.disabled = true;                
                 stlpec.appendChild(ch);
             }
             

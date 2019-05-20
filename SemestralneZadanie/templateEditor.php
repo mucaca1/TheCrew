@@ -11,6 +11,29 @@ if(isset($_GET['language'])){
     $_SESSION['language'] = $_GET['language'];
     $language = $_GET['language'];
 }
+?>
+<?php
+//ak nie je prihlaseny
+    if(!isset($_SESSION['accountID'])){
+        //echo $_SESSION['accountID'];
+        header("Location:index.php");
+    }
+    else{
+        //ak je tak zober vsetky data co viem.
+        $sql = "SELECT u.username, u.email, u.number, u.type FROM users u WHERE u.id='" . $_SESSION['accountID'] . "'";
+        $userInfo = array();
+        $result = $conn->query($sql);
+        while( $row = $result->fetch_assoc() ) {
+            array_push($userInfo, $row['username']);
+            array_push($userInfo, $row['email']);
+            array_push($userInfo, $row['number']);
+            array_push($userInfo, $row['type']);
+
+            $type = $row['type'];
+        }
+    }
+?>
+<?php
 if(isset($_POST['editordata']) && isset($_POST['id_template'])){
 	
 	$sql45 = "UPDATE mail_template SET TEMPLATE='".$_POST['editordata']."' WHERE ID=".$_POST['id_template'];
@@ -44,12 +67,15 @@ if(isset($_POST['editordata']) && isset($_POST['id_template'])){
     <title><?php while($row = $result->fetch_assoc()){ echo $row['text']; } ?></title>
         
     <!--Zakladne CSS-->
-    <link href="./CSS/style.css" media="all" rel="stylesheet" type="text/css"/>
+	<link href="./CSS/style.css" media="all" rel="stylesheet" type="text/css"/>
+	<link href="https://netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.css" rel="stylesheet">
+	<link href="./CSS/main.css" media="all" rel="stylesheet" type="text/css"/>
+    <link href="./CSS/font-awesome.min.css" media="all" rel="stylesheet" type="text/css"/>
     <!--CSS pre tlac-->
     <link rel="stylesheet" href="./CSS/print-style.css" type="text/css" media="print,projection">
 	
 	<!-- include libraries(jQuery, bootstrap) -->
-	<link href="https://netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.css" rel="stylesheet">
+	
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script> 
 	<script src="https://netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.js"></script> 
 
@@ -69,12 +95,14 @@ if(isset($_POST['editordata']) && isset($_POST['id_template'])){
 <body>
     <?php
 	include "menubar.php";
-	echo "<script> document.getElementById('login_user_name').innerHTML='". $userInfo[0] ."' </script>";
+	echo "<script> document.getElementById('login_user_name').innerHTML='Home (". $userInfo[0] .")' </script>";
     echo "<script> initText(document.getElementById('logoffButton'), 'logoff','".$language."') </script>";
 	?>
-    <h1>The Crew</h1>
-    <article>
-        <div class="content">
+    <article id="work" class="wrapper style1" style="padding: 5em 0 5em 0">
+		<h1>The Crew</h1>
+	</article>
+	<article id="work" class="wrapper style2">
+        <div class="container">
 		
 			
 			<button onClick="fillText()">Load template</button><br>
@@ -93,13 +121,12 @@ if(isset($_POST['editordata']) && isset($_POST['id_template'])){
 			  <textarea action="templateEditor.php" id="summernote" name="editordata"></textarea>
 			  <input type="submit" id="submitBtn" value="SaveTemplate">
 			</form>
-        </div>
+		</div>
+		<?php include "footer.php"?>
     </article>
     
 
-    <footer>
-	<p>&copy; The Crew 2019 - Lendáč, Krč, Szalay, Czerwinski, Tran Minh</p>
-    </footer>
+
 <script>
 
 $(document).ready(function() {

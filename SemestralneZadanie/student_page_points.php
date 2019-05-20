@@ -23,7 +23,7 @@ if(isset($_GET['language'])){
         
         $sql = "SELECT l.text FROM language l WHERE l.page_name='" . $page_name[0] . ".title' AND l.language='" . $language . "'";
         $result = $conn->query($sql);
-    ?>
+?>
 <html lang="<?php echo $language ?>">
 <head>
     <link rel="icon" href="data:;base64,=">
@@ -43,6 +43,8 @@ if(isset($_GET['language'])){
         
     <!--Zakladne CSS-->
     <link href="./CSS/style.css" media="all" rel="stylesheet" type="text/css"/>
+    <link href="./CSS/main.css" media="all" rel="stylesheet" type="text/css"/>
+    <link href="./CSS/font-awesome.min.css" media="all" rel="stylesheet" type="text/css"/>
 
     <!--CSS pre tlac-->
     <link rel="stylesheet" href="./CSS/print-style.css" type="text/css" media="print,projection">
@@ -81,13 +83,13 @@ if(isset($_GET['language'])){
 <body onload = 'enableButton(); disableButton(); getChanges(<?php echo $_SESSION["accountID"] ?>, false); setId(<?php echo $_SESSION["accountID"] ?>); enLang();'>
     <?php
 	include "menubar.php";
-	echo "<script> document.getElementById('login_user_name').innerHTML='". $userInfo[0] ."' </script>";
-    //echo "<script> initText(document.getElementById('logoffButton'), 'logoff','".$language."') </script>";
+	echo "<script> document.getElementById('login_user_name').innerHTML='Home (". $userInfo[0] .")' </script>";
+    echo "<script> initText(document.getElementById('logoffButton'), 'logoff','".$language."') </script>";
 	?>
-    <h1>The Crew</h1>
-    <article>
-        <div id="content">
-
+    <article id="work" class="wrapper style1" style="padding: 5em 0 5em 0">
+	    <h1>The Crew</h1>
+    </article>
+    <article id="work" class="wrapper style2">
         <?php
         /*    $sql = "SELECT u.number FROM users u WHERE u.id = " . $_SESSION['accountID'] . " LIMIT 1";
             $result = $conn->query($sql);
@@ -219,6 +221,7 @@ if(isset($_GET['language'])){
         ?>
 
         </div>
+        <?php include "footer.php"?>
     </article>
     <script>
     $(document).ready(function(){
@@ -227,9 +230,5 @@ if(isset($_GET['language'])){
     }, 1000);
 });
     </script>
-
-    <footer>
-        <p>&copy; The Crew 2019 - Lendáč, Krč, Szalay, Czerwinski, Tran Minh</p>
-    </footer>
 </body>
 </html>
